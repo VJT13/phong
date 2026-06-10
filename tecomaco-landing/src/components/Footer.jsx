@@ -1,4 +1,9 @@
+import { usePortfolio } from '../context/PortfolioContext';
+
 export default function Footer() {
+  const { data } = usePortfolio();
+  const { contact } = data;
+
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -49,16 +54,21 @@ export default function Footer() {
         <div>
           <h4 className="footer-title">Contact</h4>
           <ul className="footer-links">
-            <li><a href="#">xxx</a></li>
-            <li><a href="#">xxx</a></li>
-            <li><a href="#">xxx</a></li>
-            <li><a href="#">Mon-Sat 8:00-17:30</a></li>
+            <li><span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }}>📍 {contact.address}</span></li>
+            <li><span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }}>📧 {contact.email}</span></li>
+            <li><span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }}>📱 {contact.phone}</span></li>
+            <li><span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.9rem' }}>🕐 {contact.workingHours}</span></li>
           </ul>
         </div>
       </div>
 
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} TecoMaco Industrial. All rights reserved.</span>
+        <span>
+          © {new Date().getFullYear()} TecoMaco Industrial. All rights reserved. 
+          <a href="#/admin" style={{ color: 'var(--accent)', marginLeft: '1rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+            ⚙️ Dashboard
+          </a>
+        </span>
         <span>Precision Fastening Solutions — Made in Vietnam</span>
       </div>
     </footer>

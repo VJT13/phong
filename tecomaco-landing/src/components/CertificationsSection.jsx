@@ -1,65 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { usePortfolio } from '../context/PortfolioContext';
 import AnimatedCounter from './AnimatedCounter';
-
-const certifications = [
-  {
-    id: 1,
-    icon: '🏆',
-    title: 'ISO 9001:2015',
-    pdfUrl: '/certs/ISO 90012015 - DRILLMACO INDUSTRIAL COMPANY LIMITED  (1).pdf',
-    shortDesc: 'Quality Management System certificate validating that TecoMaco maintains strict manufacturing standards, quality controls, and customer-focused processes.',
-    longDesc: 'The ISO 9001:2015 standard is the international benchmark for Quality Management Systems (QMS). For TecoMaco, this certification guarantees that every manufacturing step — from raw steel procurement to cold forging, thread rolling, heat treatment, and packaging — is governed by strict quality management procedures. This ensures high dimensional accuracy, consistent mechanical performance, and complete traceabilty of our fastener products.'
-  },
-  {
-    id: 2,
-    icon: '🌿',
-    title: 'ISO 14001:2015',
-    pdfUrl: '/certs/ISO 140012015 - DRILLMACO INDUSTRIAL COMPANY LIMITED.pdf',
-    shortDesc: 'Environmental Management System certification validating TecoMaco\'s dedication to eco-friendly production, energy efficiency, and waste management.',
-    longDesc: 'ISO 14001:2015 specifies the requirements for an environmental management system that an organization can use to enhance its environmental performance. TecoMaco is committed to minimizing the environmental footprint of our fastener manufacturing processes. This includes operating state-of-the-art closed-loop water treatment systems, optimizing energy efficiency in our heat treatment furnaces, and recycling 100% of steel scrap.'
-  },
-  {
-    id: 3,
-    icon: '🛡️',
-    title: 'API Spec Q1 / Certificate Q1-2527',
-    pdfUrl: '/certs/Certificate Q1-2527.pdf',
-    shortDesc: 'American Petroleum Institute Specification Q1 certification, establishing our capability for high-strength energy infrastructure components.',
-    longDesc: 'The API Spec Q1 certification is a prestigious quality management system standard designed specifically for manufacturing organizations in the petroleum and natural gas industry. This certification highlights TecoMaco\'s engineering capability to manufacture high-strength, high-integrity industrial fasteners capable of enduring extreme pressures, corrosive environments, and structural fatigue in critical energy infrastructure applications.'
-  },
-  {
-    id: 4,
-    icon: '📋',
-    title: 'ISO standard compliance certificate',
-    pdfUrl: '/certs/Certificate ISO-2660 (1).pdf',
-    shortDesc: 'Conformity certification verifying structural fastener reliability and mechanical safety tolerances.',
-    longDesc: 'This compliance certificate validates that TecoMaco fastener lines conform fully to international ISO mechanical safety and performance standards. It ensures that our tensile strength, yield strength, hardness, and corrosion-resistance specifications meet the safety requirements necessary for high-load industrial, construction, and automotive applications.'
-  },
-  {
-    id: 5,
-    icon: '🏢',
-    title: 'TecoMaco Business Registration',
-    pdfUrl: '/certs/TecoMaco Business Registration Certificate - Latest Version.pdf',
-    shortDesc: 'Official business registration and manufacturing license for TecoMaco Vietnam operations.',
-    longDesc: 'This document is the official business registration certificate issued by the Department of Planning and Investment of Vietnam. It validates TecoMaco as a legally registered enterprise authorized to conduct high-tech manufacturing, metal machining, chemical surface plating, and global exporting of industrial fasteners from our industrial zone facility.'
-  },
-  {
-    id: 6,
-    icon: '⚙️',
-    title: 'TecoMaco PT Registration',
-    pdfUrl: '/certs/TecoMaco PT Business Registration Certificate - Latest Version.pdf',
-    shortDesc: 'Official business license for our specialized heat treatment and plating processing branch.',
-    longDesc: 'This registration license authorizes operations for our specialized manufacturing branch. It covers advanced metal processing, including automated heat treatment furnaces, zinc plating lines, hot-dip galvanizing, and logistics management — ensuring our in-house capability covers the entire production lifecycle.'
-  },
-];
-
-const stats = [
-  { number: 50, suffix: '+', label: 'Export Countries' },
-  { number: 500, suffix: 'T', label: 'Monthly Output' },
-  { number: 10000, suffix: '+', label: 'Product SKUs' },
-  { number: 99, suffix: '.5%', label: 'Quality Rate' },
-];
 
 const fadeIn = {
   hidden: { opacity: 0, y: 40 },
@@ -97,12 +40,14 @@ function CertModal({ cert, onClose }) {
             {cert.longDesc}
           </p>
           
-          <div className="pdf-viewer-container">
-            <iframe
-              src={`${cert.pdfUrl}#toolbar=0`}
-              title={`${cert.title} PDF Document`}
-            />
-          </div>
+          {cert.pdfUrl && (
+            <div className="pdf-viewer-container">
+              <iframe
+                src={`${cert.pdfUrl}#toolbar=0`}
+                title={`${cert.title} PDF Document`}
+              />
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
@@ -110,6 +55,8 @@ function CertModal({ cert, onClose }) {
 }
 
 export default function CertificationsSection() {
+  const { data } = usePortfolio();
+  const { certifications } = data;
   const [selectedCert, setSelectedCert] = useState(null);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
 
@@ -122,16 +69,13 @@ export default function CertificationsSection() {
           animate={inView ? 'visible' : 'hidden'}
           variants={fadeIn}
         >
-          <div className="section-badge">🏆 Certifications & Achievements</div>
-          <h2 className="section-title">Trusted Worldwide</h2>
-          <p className="section-subtitle">
-            Our commitment to quality is backed by internationally recognized certifications
-            and a proven track record of manufacturing excellence.
-          </p>
+          <div className="section-badge">{certifications.badge}</div>
+          <h2 className="section-title">{certifications.title}</h2>
+          <p className="section-subtitle">{certifications.subtitle}</p>
         </motion.div>
 
         <div className="certs-grid">
-          {certifications.map((cert, i) => (
+          {certifications.list.map((cert, i) => (
             <motion.div
               key={cert.id}
               className="cert-card"
@@ -152,7 +96,7 @@ export default function CertificationsSection() {
         </div>
 
         <div className="certs-stats">
-          {stats.map((stat, i) => (
+          {certifications.stats.map((stat, i) => (
             <motion.div
               key={i}
               className="cert-stat"

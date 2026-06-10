@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { usePortfolio } from '../context/PortfolioContext';
 import AnimatedCounter from './AnimatedCounter';
 
 const particles = Array.from({ length: 30 }, (_, i) => ({
@@ -20,10 +21,40 @@ const fadeUp = {
 };
 
 export default function HeroSection() {
+  const { data } = usePortfolio();
+  const { hero } = data;
+
+  const renderTitle = (title) => {
+    const match = title.match(/(.*)\[(.*)\](.*)/);
+    if (match) {
+      return (
+        <>
+          {match[1]}<span className="highlight">{match[2]}</span>{match[3]}
+        </>
+      );
+    }
+    const words = title.split(' ');
+    if (words.length >= 3) {
+      return (
+        <>
+          {words[0]} <span className="highlight">{words[1]}</span> <br />{words.slice(2).join(' ')}
+        </>
+      );
+    }
+    if (words.length === 2) {
+      return (
+        <>
+          {words[0]} <span className="highlight">{words[1]}</span>
+        </>
+      );
+    }
+    return title;
+  };
+
   return (
     <section id="home" className="hero">
       <div className="hero-bg">
-        <img src="/images/factory/factory-1.jpg" alt="TecoMaco Factory" loading="eager" />
+        <img src={hero.bgImage || "/images/factory/factory-1.jpg"} alt="Portfolio Background" loading="eager" />
       </div>
       <div className="hero-overlay" />
       <div className="hero-particles">
@@ -45,51 +76,38 @@ export default function HeroSection() {
       <div className="hero-content">
         <motion.div className="hero-left" initial="hidden" animate="visible">
           <motion.div className="hero-badge" variants={fadeUp} custom={0}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            Made in Vietnam — Trusted Worldwide
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" /></svg>
+            {hero.badge}
           </motion.div>
-          
+
           <motion.h1 className="hero-title" variants={fadeUp} custom={1}>
-            Precision{' '}
-            <span className="highlight">Fastening</span>
-            <br />Solutions
+            {renderTitle(hero.title)}
           </motion.h1>
-          
+
           <motion.p className="hero-subtitle" variants={fadeUp} custom={2}>
-            TecoMaco delivers world-class industrial fasteners, automotive fastening solutions,
-            and custom manufacturing — engineered with precision, trusted by global partners.
+            {hero.subtitle}
           </motion.p>
-          
+
           <motion.div className="hero-cta-group" variants={fadeUp} custom={3}>
             <a href="#products" className="btn btn-primary" onClick={(e) => { e.preventDefault(); document.getElementById('products')?.scrollIntoView({ behavior: 'smooth' }); }}>
               Explore Products
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
             </a>
             <a href="#contact" className="btn btn-outline" onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              Contact Us
+              Contact Me
             </a>
           </motion.div>
-          
+
           <motion.div className="hero-stats" variants={fadeUp} custom={4}>
-            <div className="hero-stat">
-              <div className="hero-stat-number"><AnimatedCounter end={30000} suffix="" /></div>
-              <div className="hero-stat-label">m² Factory</div>
-            </div>
-            <div className="hero-stat">
-              <div className="hero-stat-number"><AnimatedCounter end={300} suffix="+" /></div>
-              <div className="hero-stat-label">Employees</div>
-            </div>
-            <div className="hero-stat">
-              <div className="hero-stat-number"><AnimatedCounter end={20} suffix="+" /></div>
-              <div className="hero-stat-label">Years Exp.</div>
-            </div>
-            <div className="hero-stat">
-              <div className="hero-stat-number"><AnimatedCounter end={50} suffix="+" /></div>
-              <div className="hero-stat-label">Countries</div>
-            </div>
+            {hero.stats.map((stat, idx) => (
+              <div key={idx} className="hero-stat">
+                <div className="hero-stat-number"><AnimatedCounter end={stat.number} suffix={stat.suffix} /></div>
+                <div className="hero-stat-label">{stat.label}</div>
+              </div>
+            ))}
           </motion.div>
         </motion.div>
-        
+
         <motion.div
           className="hero-right"
           initial={{ opacity: 0, x: 60 }}
@@ -98,16 +116,20 @@ export default function HeroSection() {
         >
           <div className="hero-image-container">
             <div className="hero-image-main">
-              <img src="/images/factory/factory-3.jpg" alt="TecoMaco Manufacturing" />
+              <img src={hero.image || "/images/factory/factory-3.jpg"} alt="Manufacturing Portfolio" />
             </div>
-            <div className="hero-floating-card card-1">
-              <div className="card-icon">🏭</div>
-              <div className="card-text">ISO 9001:2015</div>
-            </div>
-            <div className="hero-floating-card card-2">
-              <div className="card-icon">🌍</div>
-              <div className="card-text">Global Export</div>
-            </div>
+            {hero.card1 && (
+              <div className="hero-floating-card card-1">
+                <div className="card-icon">{hero.card1.icon}</div>
+                <div className="card-text">{hero.card1.text}</div>
+              </div>
+            )}
+            {hero.card2 && (
+              <div className="hero-floating-card card-2">
+                <div className="card-icon">{hero.card2.icon}</div>
+                <div className="card-text">{hero.card2.text}</div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

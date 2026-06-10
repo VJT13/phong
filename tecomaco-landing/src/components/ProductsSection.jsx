@@ -1,126 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-
-const products = [
-  {
-    id: 1,
-    title: 'Staples',
-    icon: '📎',
-    image: '/images/factory/factory-2.jpg',
-    videoUrl: '/videos/production-1.mp4',
-    desc: 'Industrial staples for pneumatic fastening tools — precision wire forming for construction and packaging.',
-    applications: ['Construction framing', 'Furniture assembly', 'Packaging', 'Insulation fastening'],
-    materials: ['Low carbon steel', 'Stainless steel', 'Galvanized wire'],
-    surfaces: ['Bright finish', 'Galvanized', 'Electro-zinc plated'],
-    standards: ['DIN', 'ASTM', 'BS'],
-    detail: 'TecoMaco staples are manufactured using precision wire-forming technology, ensuring consistent crown width, leg length, and point geometry. Suitable for use with all major pneumatic stapling systems.'
-  },
-  {
-    id: 2,
-    title: 'Brads',
-    icon: '📌',
-    image: '/images/factory/factory-4.jpg',
-    videoUrl: '/videos/production-2.mp4',
-    desc: 'Fine gauge brad nails for finish carpentry, trim work, and delicate woodworking applications.',
-    applications: ['Trim & molding', 'Cabinet assembly', 'Finish carpentry', 'Decorative panels'],
-    materials: ['Carbon steel', 'Stainless steel 304/316'],
-    surfaces: ['Bright finish', 'Galvanized', 'Electro-plated'],
-    standards: ['DIN', 'ISO', 'ANSI'],
-    detail: 'Our precision brads feature consistent gauge dimensions and optimized point geometry for clean, splitting-free penetration in fine woodworking applications.'
-  },
-  {
-    id: 3,
-    title: 'Nails',
-    icon: '🔨',
-    image: '/images/factory/factory-5.jpg',
-    videoUrl: '/videos/production-3.mp4',
-    desc: 'Full range of industrial nails — coil nails, framing nails, roofing nails, and specialty fasteners.',
-    applications: ['Structural framing', 'Roofing', 'Fencing', 'Pallet manufacturing'],
-    materials: ['Carbon steel', 'Stainless steel', 'Hardened steel'],
-    surfaces: ['Hot-dip galvanized', 'Electro-galvanized', 'Vinyl coated', 'Bright'],
-    standards: ['DIN', 'ISO', 'ASTM', 'ANSI'],
-    detail: 'From coil nails to strip nails, our full range covers every construction and industrial fastening need. Heat-treated for optimal hardness and withdrawal resistance.'
-  },
-  {
-    id: 4,
-    title: 'Screws',
-    icon: '🔩',
-    image: '/images/factory/factory-6.jpg',
-    videoUrl: '/videos/production-4.mp4',
-    desc: 'Self-tapping, drywall, machine, and specialty screws — precision thread rolling for superior holding power.',
-    applications: ['Drywall installation', 'Metal framing', 'Machinery assembly', 'Automotive'],
-    materials: ['Carbon steel C1022', 'Stainless steel 304/316', 'Alloy steel'],
-    surfaces: ['Black phosphate', 'Zinc plated', 'Dacromet', 'Nickel plated'],
-    standards: ['DIN', 'ISO', 'ASTM', 'ANSI', 'BS'],
-    detail: 'Our screw manufacturing features cold heading, precision thread rolling, heat treatment, and advanced surface coating — delivering consistent torque performance and corrosion resistance.'
-  },
-  {
-    id: 5,
-    title: 'Bolts & Nuts',
-    icon: '🔧',
-    image: '/images/factory/factory-7.jpg',
-    videoUrl: '/videos/production-1.mp4',
-    desc: 'Hex bolts, carriage bolts, flange bolts with matching nuts — engineered for structural integrity.',
-    applications: ['Structural steel', 'Machinery', 'Automotive', 'Infrastructure'],
-    materials: ['Grade 4.8/8.8/10.9/12.9', 'Stainless A2/A4', 'Alloy steel'],
-    surfaces: ['Hot-dip galvanized', 'Zinc flake', 'Dacromet', 'Black oxide'],
-    standards: ['DIN 931/933', 'ISO 4014/4017', 'ASTM A325/A490', 'ANSI'],
-    detail: 'Our bolt and nut production features multi-station cold forging, CNC precision machining, controlled heat treatment, and comprehensive dimensional inspection per international standards.'
-  },
-  {
-    id: 6,
-    title: 'Thread Rods',
-    icon: '📏',
-    image: '/images/factory/factory-8.jpg',
-    videoUrl: '/videos/production-2.mp4',
-    desc: 'Fully threaded rods and studs — continuous thread precision for structural and mechanical applications.',
-    applications: ['Concrete anchoring', 'Pipe hanging', 'Structural connections', 'Chemical anchoring'],
-    materials: ['Grade 4.8/8.8', 'Stainless steel 304/316', 'B7 alloy steel'],
-    surfaces: ['Hot-dip galvanized', 'Zinc plated', 'Plain'],
-    standards: ['DIN 975/976', 'ISO', 'ASTM A193'],
-    detail: 'Thread rods are manufactured with continuous thread rolling for superior thread form accuracy. Available in lengths up to 3 meters with tight tolerance control.'
-  },
-  {
-    id: 7,
-    title: 'Rivets',
-    icon: '🔘',
-    image: '/images/factory/factory-9.jpg',
-    videoUrl: '/videos/production-3.mp4',
-    desc: 'Blind rivets, structural rivets, and solid rivets — reliable permanent fastening solutions.',
-    applications: ['Sheet metal assembly', 'HVAC ductwork', 'Automotive', 'Aerospace'],
-    materials: ['Aluminum 5050', 'Steel/steel', 'Stainless steel', 'Copper'],
-    surfaces: ['Anodized', 'Painted', 'Zinc plated', 'Natural'],
-    standards: ['DIN 7337', 'ISO 15983/15984', 'IFI'],
-    detail: 'Our rivet range includes open-end, closed-end, multi-grip, and structural blind rivets. Manufactured with precise mandrel break-load control for consistent installation.'
-  },
-  {
-    id: 8,
-    title: 'Washers',
-    icon: '⭕',
-    image: '/images/factory/factory-10.jpg',
-    videoUrl: '/videos/production-4.mp4',
-    desc: 'Flat washers, spring washers, lock washers — essential load distribution and vibration resistance.',
-    applications: ['General assembly', 'Structural connections', 'Vibration resistance', 'Sealing'],
-    materials: ['Carbon steel', 'Stainless steel 304/316', 'Brass', 'Nylon'],
-    surfaces: ['Zinc plated', 'Hot-dip galvanized', 'Black oxide', 'Dacromet'],
-    standards: ['DIN 125/127/9021', 'ISO 7089/7090', 'ASTM F436'],
-    detail: 'Our washer production features precision stamping and heat treatment, ensuring consistent flatness, hardness, and dimensional accuracy across the full size range.'
-  },
-  {
-    id: 9,
-    title: 'Springs',
-    icon: '🔄',
-    image: '/images/factory/factory-11.jpg',
-    videoUrl: '/videos/production-1.mp4',
-    desc: 'Compression, tension, and torsion springs — custom engineered for mechanical applications.',
-    applications: ['Automotive', 'Industrial machinery', 'Electronics', 'Medical devices'],
-    materials: ['Spring steel', 'Stainless steel 302/316', 'Music wire', 'Inconel'],
-    surfaces: ['Zinc plated', 'Phosphate', 'Powder coated', 'Passivated'],
-    standards: ['DIN 2098', 'ISO', 'ASTM'],
-    detail: 'Custom spring manufacturing with CNC coiling, stress relieving, and comprehensive load testing. From micro springs to heavy-duty industrial springs.'
-  },
-];
+import { usePortfolio } from '../context/PortfolioContext';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 40 },
@@ -208,6 +89,8 @@ function ProductModal({ product, onClose }) {
 }
 
 export default function ProductsSection() {
+  const { data } = usePortfolio();
+  const { products } = data;
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
 
