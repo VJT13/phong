@@ -48,7 +48,22 @@ export function PortfolioProvider({ children }) {
         throw new Error(`Failed to fetch portfolio data: ${response.statusText}`);
       }
       const jsonData = await response.json();
-      setData(jsonData);
+      
+      // Merge with defaultData to ensure all new fields/sub-fields exist
+      const mergedData = {
+        ...defaultData,
+        ...jsonData,
+        hero: { ...defaultData.hero, ...jsonData.hero },
+        capabilities: { ...defaultData.capabilities, ...jsonData.capabilities },
+        advantages: jsonData.advantages && jsonData.advantages.length > 0 ? jsonData.advantages : defaultData.advantages,
+        factory: { ...defaultData.factory, ...jsonData.factory },
+        certifications: { ...defaultData.certifications, ...jsonData.certifications },
+        clients: { ...defaultData.clients, ...jsonData.clients },
+        sourcing: jsonData.sourcing && jsonData.sourcing.length > 0 ? jsonData.sourcing : defaultData.sourcing,
+        contact: { ...defaultData.contact, ...jsonData.contact }
+      };
+      
+      setData(mergedData);
       setError(null);
     } catch (err) {
       console.warn("Could not fetch data from Express backend, falling back to local defaults.", err);
@@ -77,13 +92,26 @@ export function PortfolioProvider({ children }) {
         logout();
         return { success: false, error: 'Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.' };
       }
-
       if (!response.ok) {
         throw new Error(`Failed to update portfolio data: ${response.statusText}`);
       }
 
       const result = await response.json();
-      setData(result.data);
+      
+      const mergedSaved = {
+        ...defaultData,
+        ...result.data,
+        hero: { ...defaultData.hero, ...result.data.hero },
+        capabilities: { ...defaultData.capabilities, ...result.data.capabilities },
+        advantages: result.data.advantages && result.data.advantages.length > 0 ? result.data.advantages : defaultData.advantages,
+        factory: { ...defaultData.factory, ...result.data.factory },
+        certifications: { ...defaultData.certifications, ...result.data.certifications },
+        clients: { ...defaultData.clients, ...result.data.clients },
+        sourcing: result.data.sourcing && result.data.sourcing.length > 0 ? result.data.sourcing : defaultData.sourcing,
+        contact: { ...defaultData.contact, ...result.data.contact }
+      };
+
+      setData(mergedSaved);
       return { success: true };
     } catch (err) {
       console.error("Error saving to database:", err);

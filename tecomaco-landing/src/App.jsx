@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { PortfolioProvider, usePortfolio } from './context/PortfolioContext';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection';
 import ProductsSection from './components/ProductsSection';
+import AdvantagesSection from './components/AdvantagesSection';
+import FactoryGallerySection from './components/FactoryGallerySection';
 import CertificationsSection from './components/CertificationsSection';
+import ClientFlagsSection from './components/ClientFlagsSection';
+import SourcingSupportSection from './components/SourcingSupportSection';
 import ContactSection from './components/ContactSection';
 import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
@@ -38,7 +41,7 @@ function AppContent() {
     <>
       {/* Premium Page Loader */}
       <div className={`page-loader ${!showLoader ? 'loaded' : ''}`}>
-        <div className="loader-logo">Phong<span>Bui</span></div>
+        <div className="loader-logo">Orin<span>Bui</span></div>
         <div className="loader-bar">
           <div className="loader-bar-fill"></div>
         </div>
@@ -52,9 +55,12 @@ function AppContent() {
           <>
             <Navbar />
             <HeroSection />
-            <AboutSection />
             <ProductsSection />
+            <AdvantagesSection />
+            <FactoryGallerySection />
             <CertificationsSection />
+            <ClientFlagsSection />
+            <SourcingSupportSection />
             <ContactSection />
             <Footer />
             <FloatingContact />
@@ -72,4 +78,3 @@ export default function App() {
     </PortfolioProvider>
   );
 }
-

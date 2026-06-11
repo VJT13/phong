@@ -16,6 +16,8 @@ export default function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
 
+  if (!contact) return null;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -51,7 +53,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="section" style={{ background: 'var(--surface)' }} ref={ref}>
+    <section id="contact" className="section contact-section" style={{ background: 'var(--surface)' }} ref={ref}>
       <div className="section-container">
         <motion.div
           className="section-header"
@@ -59,72 +61,65 @@ export default function ContactSection() {
           animate={inView ? 'visible' : 'hidden'}
           variants={fadeIn}
         >
-          <div className="section-badge">{contact.badge}</div>
-          <h2 className="section-title">{contact.title}</h2>
+          <div className="section-badge">{contact.badge || "📩 Send Your RFQ Today"}</div>
+          <h2 className="section-title">{contact.title || "READY FOR A QUOTATION?"}</h2>
           <p className="section-subtitle">{contact.subtitle}</p>
         </motion.div>
 
         <div className="contact-grid">
+          {/* Left Side: RFQ Guidance and Orin's Info */}
           <motion.div
             className="contact-info"
             initial={{ opacity: 0, x: -40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h3>Contact Information</h3>
-            <p>Our team is ready to help you find the perfect fastening solution for your project.
-               Reach out and we'll respond within 24 hours.</p>
+            <h3>Information We Typically Need</h3>
+            <p className="rfq-guidance-intro">To provide an accurate and rapid quotation, please include as much of the following details as possible in your message:</p>
+            
+            <ul className="info-needed-list">
+              {contact.infoNeeded && contact.infoNeeded.map((item, idx) => (
+                <li key={idx}>
+                  <span className="bullet-point">📌</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
 
-            <div className="contact-details">
-              <div className="contact-detail">
-                <div className="contact-detail-icon">📍</div>
-                <div className="contact-detail-text">
-                  <strong>Factory Address</strong>
-                  {contact.address}
+            <div className="manager-contact-card">
+              <h4>Contact Sourcing Manager</h4>
+              <div className="manager-contact-details">
+                <div className="manager-name">Orin Bui</div>
+                <div className="manager-role">International Sales Manager</div>
+                
+                <div className="manager-links">
+                  <a href={`mailto:${contact.email}`} className="manager-link-item">
+                    <span className="icon">📧</span>
+                    <span>{contact.email}</span>
+                  </a>
+                  <a href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="manager-link-item">
+                    <span className="icon">📱</span>
+                    <span>WhatsApp: {contact.phone}</span>
+                  </a>
+                  <a href="https://www.linkedin.com/in/orinbui-tecomaco/" target="_blank" rel="noopener noreferrer" className="manager-link-item">
+                    <span className="icon">🔗</span>
+                    <span>LinkedIn Profile</span>
+                  </a>
                 </div>
               </div>
-              <div className="contact-detail">
-                <div className="contact-detail-icon">📧</div>
-                <div className="contact-detail-text">
-                  <strong>Email</strong>
-                  {contact.email}
-                </div>
-              </div>
-              <div className="contact-detail">
-                <div className="contact-detail-icon">📱</div>
-                <div className="contact-detail-text">
-                  <strong>Phone</strong>
-                  {contact.phone}
-                </div>
-              </div>
-              <div className="contact-detail">
-                <div className="contact-detail-icon">🕐</div>
-                <div className="contact-detail-text">
-                  <strong>Working Hours</strong>
-                  {contact.workingHours}
-                </div>
-              </div>
-            </div>
-
-            <div className="contact-map">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5!2d106.6!3d10.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTDCsDQ4JzAwLjAiTiAxMDbCsDM2JzAwLjAiRQ!5e0!3m2!1sen!2s!4v1600000000000!5m2!1sen!2s"
-                title="Portfolio Location Map"
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
             </div>
           </motion.div>
 
+          {/* Right Side: Contact/RFQ Submission Form */}
           <motion.div
             className="contact-form-wrapper"
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <h3 className="contact-form-title">Send Us an Inquiry</h3>
-            <p className="contact-form-subtitle">Fill out the form and our team will get back to you shortly.</p>
+            <h3 className="contact-form-title">Send Your RFQ Today</h3>
+            <p className="contact-form-subtitle">Fill out the form below and we look forward to supporting your next project.</p>
+            
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-group">
@@ -142,17 +137,17 @@ export default function ContactSection() {
                   <input id="contact-company" className="form-input" type="text" name="company" value={formData.company} onChange={handleChange} placeholder="Company name" disabled={loading} />
                 </div>
                 <div className="form-group">
-                  <label className="form-label" htmlFor="contact-phone">Phone</label>
-                  <input id="contact-phone" className="form-input" type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+84 xxx xxx xxx" disabled={loading} />
+                  <label className="form-label" htmlFor="contact-phone">Phone / WhatsApp</label>
+                  <input id="contact-phone" className="form-input" type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="e.g. +84 915 601 096" disabled={loading} />
                 </div>
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor="contact-subject">Subject</label>
-                <input id="contact-subject" className="form-input" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="Quotation request, product inquiry..." required disabled={loading} />
+                <label className="form-label" htmlFor="contact-subject">Subject / Project Title</label>
+                <input id="contact-subject" className="form-input" type="text" name="subject" value={formData.subject} onChange={handleChange} placeholder="e.g. DIN 975 Threaded Rod RFQ" required disabled={loading} />
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor="contact-message">Message</label>
-                <textarea id="contact-message" className="form-textarea" name="message" value={formData.message} onChange={handleChange} placeholder="Tell us about your requirements..." required disabled={loading} />
+                <label className="form-label" htmlFor="contact-message">RFQ Message & Specifications</label>
+                <textarea id="contact-message" className="form-textarea" name="message" value={formData.message} onChange={handleChange} placeholder="Please detail sizes, grades, surface treatment, quantity, and packaging requirements..." required disabled={loading} />
               </div>
               
               {statusMsg.text && (
@@ -171,7 +166,7 @@ export default function ContactSection() {
               )}
 
               <button type="submit" className="form-submit" disabled={loading}>
-                {loading ? 'Sending Inquiry...' : 'Send Inquiry →'}
+                {loading ? 'Sending Request...' : 'Send Your RFQ Today →'}
               </button>
             </form>
           </motion.div>

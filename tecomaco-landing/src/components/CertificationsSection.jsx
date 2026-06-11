@@ -95,22 +95,24 @@ export default function CertificationsSection() {
           ))}
         </div>
 
-        <div className="certs-stats">
-          {certifications.stats.map((stat, i) => (
-            <motion.div
-              key={i}
-              className="cert-stat"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
-            >
-              <div className="cert-stat-number">
-                <AnimatedCounter end={stat.number} suffix={stat.suffix} />
-              </div>
-              <div className="cert-stat-label">{stat.label}</div>
-            </motion.div>
-          ))}
-        </div>
+        {certifications.stats && (
+          <div className="certs-stats">
+            {certifications.stats.map((stat, i) => (
+              <motion.div
+                key={i}
+                className="cert-stat"
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
+              >
+                <div className="cert-stat-number">
+                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
+                </div>
+                <div className="cert-stat-label">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
 
       <AnimatePresence>

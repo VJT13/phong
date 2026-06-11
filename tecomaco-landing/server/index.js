@@ -102,10 +102,12 @@ mongoose.connect(MONGODB_URI)
 // Schema definition
 const PortfolioSchema = new mongoose.Schema({
   hero: Object,
-  about: Object,
-  timeline: Array,
-  products: Array,
+  capabilities: Object,
+  advantages: Array,
+  factory: Object,
   certifications: Object,
+  clients: Object,
+  sourcing: Array,
   contact: Object,
 }, { timestamps: true });
 
@@ -166,17 +168,19 @@ app.get('/api/portfolio', async (req, res) => {
 // POST /api/portfolio - Update configuration (Secured with authMiddleware)
 app.post('/api/portfolio', authMiddleware, async (req, res) => {
   try {
-    const { hero, about, timeline, products, certifications, contact } = req.body;
+    const { hero, capabilities, advantages, factory, certifications, clients, sourcing, contact } = req.body;
     
     let portfolio = await Portfolio.findOne().sort({ createdAt: -1 });
     if (!portfolio) {
-      portfolio = new Portfolio({ hero, about, timeline, products, certifications, contact });
+      portfolio = new Portfolio({ hero, capabilities, advantages, factory, certifications, clients, sourcing, contact });
     } else {
       portfolio.hero = hero;
-      portfolio.about = about;
-      portfolio.timeline = timeline;
-      portfolio.products = products;
+      portfolio.capabilities = capabilities;
+      portfolio.advantages = advantages;
+      portfolio.factory = factory;
       portfolio.certifications = certifications;
+      portfolio.clients = clients;
+      portfolio.sourcing = sourcing;
       portfolio.contact = contact;
     }
     

@@ -4,8 +4,9 @@ import { useScrollSpy } from '../hooks/useScrollSpy';
 
 const navItems = [
   { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'products', label: 'Products' },
+  { id: 'capabilities', label: 'Capabilities' },
+  { id: 'advantages', label: 'Advantages' },
+  { id: 'gallery', label: 'Factory Gallery' },
   { id: 'certifications', label: 'Certifications' },
   { id: 'contact', label: 'Contact' },
 ];
@@ -31,8 +32,8 @@ export default function Navbar() {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-container">
           <a href="#" className="nav-logo" onClick={(e) => { e.preventDefault(); scrollTo('home'); }}>
-            <div className="nav-logo-icon">PB</div>
-            <div className="nav-logo-text">Port<span>folio</span></div>
+            <div className="nav-logo-icon">OB</div>
+            <div className="nav-logo-text">Orin<span>Bui</span></div>
           </a>
           <ul className="nav-links">
             {navItems.map(item => (

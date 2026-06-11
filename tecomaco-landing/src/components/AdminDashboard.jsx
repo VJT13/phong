@@ -96,56 +96,62 @@ export default function AdminDashboard() {
     }));
   };
 
-  // Helper lists CRUD managers
-  const updateTimelineItem = (index, field, value) => {
-    const newTimeline = [...localData.timeline];
-    newTimeline[index][field] = value;
-    setLocalData(prev => ({ ...prev, timeline: newTimeline }));
-  };
-
-  const addTimelineItem = () => {
+  // Capabilities Categories CRUD Managers
+  const updateCapabilityCategory = (index, field, value) => {
+    const newCategories = [...localData.capabilities.categories];
+    newCategories[index][field] = value;
     setLocalData(prev => ({
       ...prev,
-      timeline: [...prev.timeline, { year: '2026', desc: 'New Milestone Description' }]
+      capabilities: { ...prev.capabilities, categories: newCategories }
     }));
   };
 
-  const removeTimelineItem = (index) => {
-    const newTimeline = localData.timeline.filter((_, i) => i !== index);
-    setLocalData(prev => ({ ...prev, timeline: newTimeline }));
+  // Advantages CRUD Managers
+  const updateAdvantage = (index, field, value) => {
+    const newAdvantages = [...localData.advantages];
+    newAdvantages[index][field] = value;
+    setLocalData(prev => ({ ...prev, advantages: newAdvantages }));
   };
 
-  // Products CRUD managers
-  const updateProduct = (index, field, value) => {
-    const newProducts = [...localData.products];
-    newProducts[index][field] = value;
-    setLocalData(prev => ({ ...prev, products: newProducts }));
+  // Factory Stats CRUD Managers
+  const updateFactoryStat = (index, field, value) => {
+    const newStats = [...localData.factory.stats];
+    newStats[index][field] = value;
+    setLocalData(prev => ({
+      ...prev,
+      factory: { ...prev.factory, stats: newStats }
+    }));
   };
 
-  const addProduct = () => {
-    const newId = localData.products.length > 0 ? Math.max(...localData.products.map(p => p.id)) + 1 : 1;
-    const newProduct = {
-      id: newId,
-      title: 'New Fastener Product',
-      icon: '🔩',
-      image: '/images/factory/factory-2.jpg',
-      videoUrl: '',
-      desc: 'Short description for product grid cards.',
-      detail: 'Detailed specifications and background details shown inside modal.',
-      applications: ['Automotive', 'Construction'],
-      materials: ['Carbon steel'],
-      surfaces: ['Zinc plated'],
-      standards: ['DIN', 'ISO']
-    };
-    setLocalData(prev => ({ ...prev, products: [...prev.products, newProduct] }));
+  // Factory Gallery CRUD Managers
+  const updateGalleryImage = (index, field, value) => {
+    const newGallery = [...localData.factory.gallery];
+    newGallery[index][field] = value;
+    setLocalData(prev => ({
+      ...prev,
+      factory: { ...prev.factory, gallery: newGallery }
+    }));
   };
 
-  const removeProduct = (id) => {
-    const newProducts = localData.products.filter(p => p.id !== id);
-    setLocalData(prev => ({ ...prev, products: newProducts }));
+  const addGalleryImage = () => {
+    setLocalData(prev => ({
+      ...prev,
+      factory: {
+        ...prev.factory,
+        gallery: [...prev.factory.gallery, { src: '/images/factory/factory-1.jpg', alt: 'New Production Image' }]
+      }
+    }));
   };
 
-  // Certifications CRUD managers
+  const removeGalleryImage = (index) => {
+    const newGallery = localData.factory.gallery.filter((_, i) => i !== index);
+    setLocalData(prev => ({
+      ...prev,
+      factory: { ...prev.factory, gallery: newGallery }
+    }));
+  };
+
+  // Certifications CRUD Managers
   const updateCert = (index, field, value) => {
     const newCerts = [...localData.certifications.list];
     newCerts[index][field] = value;
@@ -155,46 +161,43 @@ export default function AdminDashboard() {
     }));
   };
 
-  const addCert = () => {
-    const newId = localData.certifications.list.length > 0 ? Math.max(...localData.certifications.list.map(c => c.id)) + 1 : 1;
-    const newCert = {
-      id: newId,
-      icon: '🏆',
-      title: 'ISO Standard Name',
-      pdfUrl: '',
-      shortDesc: 'A brief 2-sentence summary of what this certification represents.',
-      longDesc: 'A longer description for the detail modal.'
-    };
+  // Client Countries CRUD Managers
+  const updateClientCountry = (index, field, value) => {
+    const newCountries = [...localData.clients.countries];
+    newCountries[index][field] = value;
     setLocalData(prev => ({
       ...prev,
-      certifications: {
-        ...prev.certifications,
-        list: [...prev.certifications.list, newCert]
+      clients: { ...prev.clients, countries: newCountries }
+    }));
+  };
+
+  const addClientCountry = () => {
+    setLocalData(prev => ({
+      ...prev,
+      clients: {
+        ...prev.clients,
+        countries: [...prev.clients.countries, { name: 'New Country', code: 'EU' }]
       }
     }));
   };
 
-  const removeCert = (id) => {
-    const newCerts = localData.certifications.list.filter(c => c.id !== id);
+  const removeClientCountry = (index) => {
+    const newCountries = localData.clients.countries.filter((_, i) => i !== index);
     setLocalData(prev => ({
       ...prev,
-      certifications: { ...prev.certifications, list: newCerts }
+      clients: { ...prev.clients, countries: newCountries }
     }));
   };
 
-  // Export JSON utility
-  const exportJson = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localData, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "portfolio-backup.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
+  // Sourcing steps CRUD Managers
+  const updateSourcingStep = (index, field, value) => {
+    const newSourcing = [...localData.sourcing];
+    newSourcing[index][field] = value;
+    setLocalData(prev => ({ ...prev, sourcing: newSourcing }));
   };
 
   return (
-    <div className="admin-wrapper">
+    <div className="admin-container">
       <header className="admin-header">
         <div className="admin-header-left">
           <a href="#" className="admin-back-btn">← Back to Site</a>
@@ -206,13 +209,6 @@ export default function AdminDashboard() {
           <button onClick={handleSave} className="admin-btn-primary">Save Changes</button>
         </div>
       </header>
-
-      {/* Database connection warning banner */}
-      {error && (
-        <div className="admin-alert admin-alert-warning">
-          ⚠️ <strong>Offline Fallback Mode</strong>: {error}
-        </div>
-      )}
 
       {/* Floating Save Status Message */}
       {saveStatus.message && (
@@ -226,460 +222,416 @@ export default function AdminDashboard() {
         </div>
       )}
 
+      {error && (
+        <div className="admin-alert admin-alert-warning" style={{ margin: '1rem 2rem 0 2rem' }}>
+          ⚠️ <strong>Offline Fallback Mode</strong>: {error}
+        </div>
+      )}
+
       <div className="admin-layout">
         <aside className="admin-sidebar">
           <button onClick={() => setActiveTab('hero')} className={`admin-tab-btn ${activeTab === 'hero' ? 'active' : ''}`}>
-            ✨ Hero & Statistics
+            ✨ Hero (Split Screen)
           </button>
-          <button onClick={() => setActiveTab('about')} className={`admin-tab-btn ${activeTab === 'about' ? 'active' : ''}`}>
-            🏢 About Us & Features
+          <button onClick={() => setActiveTab('capabilities')} className={`admin-tab-btn ${activeTab === 'capabilities' ? 'active' : ''}`}>
+            ⚙️ Capabilities
           </button>
-          <button onClick={() => setActiveTab('timeline')} className={`admin-tab-btn ${activeTab === 'timeline' ? 'active' : ''}`}>
-            📅 Milestone Timeline
+          <button onClick={() => setActiveTab('advantages')} className={`admin-tab-btn ${activeTab === 'advantages' ? 'active' : ''}`}>
+            🏆 Advantages (10 Items)
           </button>
-          <button onClick={() => setActiveTab('products')} className={`admin-tab-btn ${activeTab === 'products' ? 'active' : ''}`}>
-            🔩 Product Catalogue
+          <button onClick={() => setActiveTab('factory')} className={`admin-tab-btn ${activeTab === 'factory' ? 'active' : ''}`}>
+            🏭 Factory & Gallery
           </button>
           <button onClick={() => setActiveTab('certs')} className={`admin-tab-btn ${activeTab === 'certs' ? 'active' : ''}`}>
-            🏆 Certifications & Stats
+            🎖️ Certifications
+          </button>
+          <button onClick={() => setActiveTab('clients')} className={`admin-tab-btn ${activeTab === 'clients' ? 'active' : ''}`}>
+            🌍 EU Clients
+          </button>
+          <button onClick={() => setActiveTab('sourcing')} className={`admin-tab-btn ${activeTab === 'sourcing' ? 'active' : ''}`}>
+            ❓ Sourcing FAQs
           </button>
           <button onClick={() => setActiveTab('contact')} className={`admin-tab-btn ${activeTab === 'contact' ? 'active' : ''}`}>
-            📞 Contact Information
+            📩 Quotation & Contact
           </button>
           <button onClick={() => setActiveTab('inquiries')} className={`admin-tab-btn ${activeTab === 'inquiries' ? 'active' : ''}`}>
-            {"\uD83D\uDCEC "} Khách hàng liên hệ
+            📥 Khách hàng liên hệ
           </button>
           <button onClick={() => setActiveTab('settings')} className={`admin-tab-btn ${activeTab === 'settings' ? 'active' : ''}`}>
-            ⚙️ System Settings
+            🔧 System Settings
           </button>
         </aside>
 
         <main className="admin-content-area">
           {/* HERO TAB */}
-          {activeTab === 'hero' && (
+          {activeTab === 'hero' && localData.hero && (
             <div className="admin-card">
-              <h2 className="admin-card-title">Hero Section Config</h2>
+              <h2 className="admin-card-title">Hero Split Screen Config</h2>
+              
+              <h3 className="admin-subheading">Left Side: Company Info</h3>
               <div className="admin-form-group">
-                <label className="admin-label">Top Banner Badge</label>
-                <input type="text" className="admin-input" value={localData.hero.badge} onChange={(e) => handleNestedChange('hero', 'badge', e.target.value)} />
+                <label className="admin-label">Europe Client Badge Text</label>
+                <input type="text" className="admin-input" value={localData.hero.badge || ''} onChange={(e) => handleNestedChange('hero', 'badge', e.target.value)} />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Main Heading Title</label>
-                <input type="text" className="admin-input" value={localData.hero.title} onChange={(e) => handleNestedChange('hero', 'title', e.target.value)} />
+                <label className="admin-label">Main Heading (Company)</label>
+                <input type="text" className="admin-input" value={localData.hero.companyHeading || ''} onChange={(e) => handleNestedChange('hero', 'companyHeading', e.target.value)} />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Subtitle Description Text</label>
-                <textarea className="admin-textarea" value={localData.hero.subtitle} onChange={(e) => handleNestedChange('hero', 'subtitle', e.target.value)} />
+                <label className="admin-label">Sub Heading (Company)</label>
+                <textarea className="admin-textarea" value={localData.hero.companySubheading || ''} onChange={(e) => handleNestedChange('hero', 'companySubheading', e.target.value)} />
               </div>
-
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Background Image Path/URL</label>
-                  <input type="text" className="admin-input" value={localData.hero.bgImage || ''} onChange={(e) => handleNestedChange('hero', 'bgImage', e.target.value)} />
+                  <label className="admin-label">Head Office Address</label>
+                  <input type="text" className="admin-input" value={localData.hero.headOffice || ''} onChange={(e) => handleNestedChange('hero', 'headOffice', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Main Image Path/URL (Right Column)</label>
-                  <input type="text" className="admin-input" value={localData.hero.image || ''} onChange={(e) => handleNestedChange('hero', 'image', e.target.value)} />
+                  <label className="admin-label">Factory Address</label>
+                  <input type="text" className="admin-input" value={localData.hero.factoryAddress || ''} onChange={(e) => handleNestedChange('hero', 'factoryAddress', e.target.value)} />
                 </div>
               </div>
 
-              <h3 className="admin-subheading mt-4">Floating Cards Overlay (Right Image Cards)</h3>
-              <div className="admin-grid-2" style={{ marginBottom: '2rem' }}>
-                <div className="admin-subcard">
-                  <h4 className="admin-subcard-title">Floating Card 1</h4>
-                  <div className="admin-grid-2" style={{ gap: '0.75rem' }}>
-                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                      <label className="admin-label">Icon (Emoji)</label>
-                      <input type="text" className="admin-input" value={localData.hero.card1?.icon || ''} onChange={(e) => {
-                        const newCard = { ...(localData.hero.card1 || {}), icon: e.target.value };
-                        handleNestedChange('hero', 'card1', newCard);
-                      }} />
-                    </div>
-                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                      <label className="admin-label">Text</label>
-                      <input type="text" className="admin-input" value={localData.hero.card1?.text || ''} onChange={(e) => {
-                        const newCard = { ...(localData.hero.card1 || {}), text: e.target.value };
-                        handleNestedChange('hero', 'card1', newCard);
-                      }} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="admin-subcard">
-                  <h4 className="admin-subcard-title">Floating Card 2</h4>
-                  <div className="admin-grid-2" style={{ gap: '0.75rem' }}>
-                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                      <label className="admin-label">Icon (Emoji)</label>
-                      <input type="text" className="admin-input" value={localData.hero.card2?.icon || ''} onChange={(e) => {
-                        const newCard = { ...(localData.hero.card2 || {}), icon: e.target.value };
-                        handleNestedChange('hero', 'card2', newCard);
-                      }} />
-                    </div>
-                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
-                      <label className="admin-label">Text</label>
-                      <input type="text" className="admin-input" value={localData.hero.card2?.text || ''} onChange={(e) => {
-                        const newCard = { ...(localData.hero.card2 || {}), text: e.target.value };
-                        handleNestedChange('hero', 'card2', newCard);
-                      }} />
-                    </div>
-                  </div>
-                </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Company Image Path / URL (Left Card Image)</label>
+                <input type="text" className="admin-input" value={localData.hero.companyImage || ''} onChange={(e) => handleNestedChange('hero', 'companyImage', e.target.value)} />
               </div>
 
-              <h3 className="admin-subheading mt-6">Counter Statistics (Hero Page bottom grid)</h3>
-              <div className="admin-grid-4">
-                {localData.hero.stats.map((stat, i) => (
-                  <div key={i} className="admin-subcard">
-                    <h4 className="admin-subcard-title">Stat Card {i+1}</h4>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Number Value</label>
-                      <input type="number" className="admin-input" value={stat.number} onChange={(e) => {
-                        const newStats = [...localData.hero.stats];
-                        newStats[i].number = parseInt(e.target.value) || 0;
-                        handleNestedChange('hero', 'stats', newStats);
-                      }} />
-                    </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Suffix (e.g. +, %, T)</label>
-                      <input type="text" className="admin-input" value={stat.suffix} onChange={(e) => {
-                        const newStats = [...localData.hero.stats];
-                        newStats[i].suffix = e.target.value;
-                        handleNestedChange('hero', 'stats', newStats);
-                      }} />
-                    </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Label Description</label>
-                      <input type="text" className="admin-input" value={stat.label} onChange={(e) => {
-                        const newStats = [...localData.hero.stats];
-                        newStats[i].label = e.target.value;
-                        handleNestedChange('hero', 'stats', newStats);
-                      }} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* ABOUT TAB */}
-          {activeTab === 'about' && (
-            <div className="admin-card">
-              <h2 className="admin-card-title">About Us Section Config</h2>
+              <h3 className="admin-subheading mt-6">Right Side: Sourcing Manager (Orin Bui)</h3>
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Badge</label>
-                  <input type="text" className="admin-input" value={localData.about.badge} onChange={(e) => handleNestedChange('about', 'badge', e.target.value)} />
+                  <label className="admin-label">Full Name</label>
+                  <input type="text" className="admin-input" value={localData.hero.me?.name || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, name: e.target.value };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Title</label>
-                  <input type="text" className="admin-input" value={localData.about.title} onChange={(e) => handleNestedChange('about', 'title', e.target.value)} />
+                  <label className="admin-label">Role Title</label>
+                  <input type="text" className="admin-input" value={localData.hero.me?.role || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, role: e.target.value };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
                 </div>
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Section Subtitle</label>
-                <input type="text" className="admin-input" value={localData.about.subtitle} onChange={(e) => handleNestedChange('about', 'subtitle', e.target.value)} />
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Content Main Heading</label>
-                <input type="text" className="admin-input" value={localData.about.heading} onChange={(e) => handleNestedChange('about', 'heading', e.target.value)} />
+                <label className="admin-label">Photo Path / URL</label>
+                <input type="text" className="admin-input" value={localData.hero.me?.photo || ''} onChange={(e) => {
+                  const newMe = { ...localData.hero.me, photo: e.target.value };
+                  handleNestedChange('hero', 'me', newMe);
+                }} />
               </div>
 
               <div className="admin-form-group">
-                <label className="admin-label">About Paragraphs (One paragraph per line)</label>
+                <label className="admin-label">Bio Paragraphs (Use double line breaks to separate paragraphs)</label>
                 <textarea 
                   className="admin-textarea" 
-                  style={{ minHeight: '150px' }}
-                  value={localData.about.paragraphs.join('\n\n')} 
+                  style={{ minHeight: '120px' }}
+                  value={localData.hero.me?.paragraphs?.join('\n\n') || ''} 
                   onChange={(e) => {
                     const paras = e.target.value.split('\n\n').filter(p => p.trim() !== '');
-                    handleNestedChange('about', 'paragraphs', paras);
+                    const newMe = { ...localData.hero.me, paragraphs: paras };
+                    handleNestedChange('hero', 'me', newMe);
                   }} 
                 />
               </div>
 
-              <h3 className="admin-subheading mt-6">Features Grid</h3>
               <div className="admin-grid-3">
-                {localData.about.features.map((feat, i) => (
-                  <div key={i} className="admin-subcard">
-                    <div className="admin-form-group">
-                      <label className="admin-label">Emoji Icon</label>
-                      <input type="text" className="admin-input" value={feat.icon} onChange={(e) => {
-                        const newFeats = [...localData.about.features];
-                        newFeats[i].icon = e.target.value;
-                        handleNestedChange('about', 'features', newFeats);
-                      }} />
-                    </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Feature Text</label>
-                      <input type="text" className="admin-input" value={feat.text} onChange={(e) => {
-                        const newFeats = [...localData.about.features];
-                        newFeats[i].text = e.target.value;
-                        handleNestedChange('about', 'features', newFeats);
-                      }} />
-                    </div>
-                  </div>
-                ))}
+                <div className="admin-form-group">
+                  <label className="admin-label">Mobile (WhatsApp)</label>
+                  <input type="text" className="admin-input" value={localData.hero.me?.mobile || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, mobile: e.target.value };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">Email</label>
+                  <input type="email" className="admin-input" value={localData.hero.me?.email || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, email: e.target.value };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">LinkedIn Profile URL</label>
+                  <input type="text" className="admin-input" value={localData.hero.me?.linkedin || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, linkedin: e.target.value };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* CAPABILITIES TAB */}
+          {activeTab === 'capabilities' && localData.capabilities && (
+            <div className="admin-card">
+              <h2 className="admin-card-title">Threaded Rod Capabilities</h2>
+              <div className="admin-form-group">
+                <label className="admin-label">Headline Title</label>
+                <input type="text" className="admin-input" value={localData.capabilities.headline || ''} onChange={(e) => handleNestedChange('capabilities', 'headline', e.target.value)} />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Sub-headline Description</label>
+                <textarea className="admin-textarea" value={localData.capabilities.subheadline || ''} onChange={(e) => handleNestedChange('capabilities', 'subheadline', e.target.value)} />
               </div>
 
-              <div className="admin-card-header-flex mt-8" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '0.5rem', marginBottom: '1.25rem' }}>
-                <h3 className="admin-subheading" style={{ marginBottom: 0, borderBottom: 'none' }}>About Swiper Gallery Images</h3>
-                <button type="button" onClick={() => {
-                  const newGallery = [...localData.about.gallery, { src: '/images/factory/factory-2.jpg', alt: 'Factory Image' }];
-                  handleNestedChange('about', 'gallery', newGallery);
-                }} className="admin-btn-secondary">+ Add Image</button>
-              </div>
-
-              <div className="admin-list">
-                {localData.about.gallery.map((img, idx) => (
-                  <div key={idx} className="admin-list-item">
-                    <div className="admin-item-fields">
-                      <div className="admin-form-group" style={{ flex: 1 }}>
-                        <label className="admin-label">Image Path/URL</label>
-                        <input type="text" className="admin-input" value={img.src} onChange={(e) => {
-                          const newGallery = [...localData.about.gallery];
-                          newGallery[idx].src = e.target.value;
-                          handleNestedChange('about', 'gallery', newGallery);
-                        }} />
-                      </div>
-                      <div className="admin-form-group" style={{ flex: 1 }}>
-                        <label className="admin-label">Alt Description</label>
-                        <input type="text" className="admin-input" value={img.alt} onChange={(e) => {
-                          const newGallery = [...localData.about.gallery];
-                          newGallery[idx].alt = e.target.value;
-                          handleNestedChange('about', 'gallery', newGallery);
-                        }} />
-                      </div>
+              <h3 className="admin-subheading mt-6">Capabilities Categories</h3>
+              <div className="admin-grid-2">
+                {localData.capabilities.categories.map((category, idx) => (
+                  <div key={idx} className="admin-subcard">
+                    <h4 className="admin-subcard-title">Category {idx + 1}</h4>
+                    <div className="admin-form-group">
+                      <label className="admin-label">Title</label>
+                      <input type="text" className="admin-input" value={category.title} onChange={(e) => updateCapabilityCategory(idx, 'title', e.target.value)} />
                     </div>
-                    <button type="button" onClick={() => {
-                      const newGallery = localData.about.gallery.filter((_, i) => i !== idx);
-                      handleNestedChange('about', 'gallery', newGallery);
-                    }} className="admin-btn-danger">Delete</button>
+                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                      <label className="admin-label">Items (One item per line)</label>
+                      <textarea 
+                        className="admin-textarea" 
+                        style={{ minHeight: '120px' }}
+                        value={category.items.join('\n')} 
+                        onChange={(e) => {
+                          const items = e.target.value.split('\n').filter(i => i.trim() !== '');
+                          updateCapabilityCategory(idx, 'items', items);
+                        }}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* TIMELINE TAB */}
-          {activeTab === 'timeline' && (
+          {/* ADVANTAGES TAB */}
+          {activeTab === 'advantages' && localData.advantages && (
             <div className="admin-card">
-              <div className="admin-card-header-flex">
-                <h2 className="admin-card-title">Company Milestones & History</h2>
-                <button onClick={addTimelineItem} className="admin-btn-secondary">+ Add Milestone</button>
-              </div>
-              <div className="admin-list">
-                {localData.timeline.map((item, i) => (
-                  <div key={i} className="admin-list-item">
-                    <div className="admin-item-fields">
-                      <div className="admin-form-group" style={{ maxWidth: '120px' }}>
-                        <label className="admin-label">Year</label>
-                        <input type="text" className="admin-input" value={item.year} onChange={(e) => updateTimelineItem(i, 'year', e.target.value)} />
-                      </div>
-                      <div className="admin-form-group" style={{ flex: 1 }}>
-                        <label className="admin-label">Description Description</label>
-                        <input type="text" className="admin-input" value={item.desc} onChange={(e) => updateTimelineItem(i, 'desc', e.target.value)} />
-                      </div>
+              <h2 className="admin-card-title">Competitive Advantages (10 Items)</h2>
+              <p className="admin-helper-text" style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                Note: The 1st advantage (usually EU Anti-Dumping) is automatically featured at the top of the section with a glowing gradient layout.
+              </p>
+              
+              <div className="admin-advantages-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {localData.advantages.map((adv, idx) => (
+                  <div key={idx} className="admin-subcard" style={{ borderLeft: idx === 0 ? '4px solid #f59e0b' : '1px solid rgba(255,255,255,0.06)' }}>
+                    <h4 className="admin-subcard-title" style={{ color: idx === 0 ? '#f59e0b' : 'var(--accent)' }}>
+                      Advantage {idx + 1} {idx === 0 && "(Featured Highlight)"}
+                    </h4>
+                    <div className="admin-form-group">
+                      <label className="admin-label">Title</label>
+                      <input type="text" className="admin-input" value={adv.title} onChange={(e) => updateAdvantage(idx, 'title', e.target.value)} />
                     </div>
-                    <button onClick={() => removeTimelineItem(i)} className="admin-btn-danger">Delete</button>
+                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                      <label className="admin-label">Description Paragraph</label>
+                      <textarea className="admin-textarea" style={{ minHeight: '80px' }} value={adv.desc} onChange={(e) => updateAdvantage(idx, 'desc', e.target.value)} />
+                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* PRODUCTS TAB */}
-          {activeTab === 'products' && (
+          {/* FACTORY TAB */}
+          {activeTab === 'factory' && localData.factory && (
             <div className="admin-card">
-              <div className="admin-card-header-flex">
-                <h2 className="admin-card-title">Products Catalogue</h2>
-                <button onClick={addProduct} className="admin-btn-secondary">+ Add Product</button>
+              <h2 className="admin-card-title">Factory Facilities & Gallery Configuration</h2>
+              
+              <div className="admin-form-group">
+                <label className="admin-label">Section Title</label>
+                <input type="text" className="admin-input" value={localData.factory.title || ''} onChange={(e) => handleNestedChange('factory', 'title', e.target.value)} />
               </div>
-              <div className="admin-products-editor">
-                {localData.products.map((prod, index) => (
-                  <details key={prod.id} className="admin-product-details-summary">
-                    <summary className="admin-summary-header">
-                      <span className="summary-icon">{prod.icon}</span>
-                      <strong className="summary-title">{prod.title}</strong>
-                      <button type="button" onClick={() => removeProduct(prod.id)} className="summary-del-btn">Delete Product</button>
-                    </summary>
-                    <div className="summary-body">
-                      <div className="admin-grid-3">
-                        <div className="admin-form-group">
-                          <label className="admin-label">Product Name Title</label>
-                          <input type="text" className="admin-input" value={prod.title} onChange={(e) => updateProduct(index, 'title', e.target.value)} />
-                        </div>
-                        <div className="admin-form-group">
-                          <label className="admin-label">Product Icon Emoji</label>
-                          <input type="text" className="admin-input" value={prod.icon} onChange={(e) => updateProduct(index, 'icon', e.target.value)} />
-                        </div>
-                        <div className="admin-form-group">
-                          <label className="admin-label">Production Video URL</label>
-                          <input type="text" className="admin-input" value={prod.videoUrl || ''} onChange={(e) => updateProduct(index, 'videoUrl', e.target.value)} />
-                        </div>
-                      </div>
-                      <div className="admin-grid-2">
-                        <div className="admin-form-group">
-                          <label className="admin-label">Product Image Path/URL</label>
-                          <input type="text" className="admin-input" value={prod.image} onChange={(e) => updateProduct(index, 'image', e.target.value)} />
-                        </div>
-                        <div className="admin-form-group">
-                          <label className="admin-label">Brief Card Description</label>
-                          <input type="text" className="admin-input" value={prod.desc} onChange={(e) => updateProduct(index, 'desc', e.target.value)} />
-                        </div>
-                      </div>
-                      <div className="admin-form-group">
-                        <label className="admin-label">Detailed Description (inside Modal)</label>
-                        <textarea className="admin-textarea" value={prod.detail} onChange={(e) => updateProduct(index, 'detail', e.target.value)} />
-                      </div>
+              <div className="admin-form-group">
+                <label className="admin-label">Section Subtitle</label>
+                <textarea className="admin-textarea" value={localData.factory.subtitle || ''} onChange={(e) => handleNestedChange('factory', 'subtitle', e.target.value)} />
+              </div>
 
-                      {/* Tag list arrays */}
-                      <div className="admin-grid-2">
-                        <div className="admin-form-group">
-                          <label className="admin-label">Applications (Comma separated)</label>
-                          <input type="text" className="admin-input" value={prod.applications.join(', ')} onChange={(e) => {
-                            const arr = e.target.value.split(',').map(s => s.trim()).filter(s => s !== '');
-                            updateProduct(index, 'applications', arr);
-                          }} />
-                        </div>
-                        <div className="admin-form-group">
-                          <label className="admin-label">Materials (Comma separated)</label>
-                          <input type="text" className="admin-input" value={prod.materials.join(', ')} onChange={(e) => {
-                            const arr = e.target.value.split(',').map(s => s.trim()).filter(s => s !== '');
-                            updateProduct(index, 'materials', arr);
-                          }} />
-                        </div>
+              <div className="admin-grid-2">
+                <div className="admin-form-group">
+                  <label className="admin-label">Location (e.g. Phu Tho Province)</label>
+                  <input type="text" className="admin-input" value={localData.factory.location || ''} onChange={(e) => handleNestedChange('factory', 'location', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">Production Process (e.g. Full In-House...)</label>
+                  <input type="text" className="admin-input" value={localData.factory.processType || ''} onChange={(e) => handleNestedChange('factory', 'processType', e.target.value)} />
+                </div>
+              </div>
+
+              <h3 className="admin-subheading mt-6">Factory Statistics counters</h3>
+              <div className="admin-grid-3">
+                {localData.factory.stats && localData.factory.stats.map((stat, idx) => (
+                  <div key={idx} className="admin-subcard">
+                    <h4 className="admin-subcard-title">Stat {idx + 1}</h4>
+                    <div className="admin-form-group">
+                      <label className="admin-label">Value Number</label>
+                      <input type="number" className="admin-input" value={stat.number} onChange={(e) => updateFactoryStat(idx, 'number', parseInt(e.target.value) || 0)} />
+                    </div>
+                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                      <label className="admin-label">Description Label</label>
+                      <input type="text" className="admin-input" value={stat.label} onChange={(e) => updateFactoryStat(idx, 'label', e.target.value)} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <h3 className="admin-subheading mt-8">Gallery Photo List ({localData.factory.gallery.length} Images)</h3>
+              <div className="admin-gallery-manager" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {localData.factory.gallery.map((img, idx) => (
+                  <div key={idx} className="admin-subcard" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                    <div className="gallery-preview-wrapper" style={{ width: '80px', height: '60px', overflow: 'hidden', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+                      <img src={img.src} alt={img.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    </div>
+                    <div className="admin-grid-2" style={{ flexGrow: 1, gap: '0.75rem' }}>
+                      <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                        <label className="admin-label">Image Path / URL</label>
+                        <input type="text" className="admin-input" value={img.src} onChange={(e) => updateGalleryImage(idx, 'src', e.target.value)} />
                       </div>
-                      <div className="admin-grid-2">
-                        <div className="admin-form-group">
-                          <label className="admin-label">Surface Treatments (Comma separated)</label>
-                          <input type="text" className="admin-input" value={prod.surfaces.join(', ')} onChange={(e) => {
-                            const arr = e.target.value.split(',').map(s => s.trim()).filter(s => s !== '');
-                            updateProduct(index, 'surfaces', arr);
-                          }} />
-                        </div>
-                        <div className="admin-form-group">
-                          <label className="admin-label">Standards Compliance (Comma separated)</label>
-                          <input type="text" className="admin-input" value={prod.standards.join(', ')} onChange={(e) => {
-                            const arr = e.target.value.split(',').map(s => s.trim()).filter(s => s !== '');
-                            updateProduct(index, 'standards', arr);
-                          }} />
-                        </div>
+                      <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                        <label className="admin-label">Description / Alt Caption</label>
+                        <input type="text" className="admin-input" value={img.alt} onChange={(e) => updateGalleryImage(idx, 'alt', e.target.value)} />
                       </div>
                     </div>
-                  </details>
+                    <button 
+                      onClick={() => removeGalleryImage(idx)} 
+                      className="admin-btn-secondary" 
+                      style={{ padding: '0.5rem 0.75rem', border: '1px solid #ef4444', color: '#ef4444', height: 'fit-content', marginTop: '1rem' }}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 ))}
+                
+                <button onClick={addGalleryImage} className="admin-btn-secondary" style={{ width: '100%', borderStyle: 'dashed', color: 'var(--accent)' }}>
+                  + Add New Image to Gallery
+                </button>
               </div>
             </div>
           )}
 
           {/* CERTIFICATIONS TAB */}
-          {activeTab === 'certs' && (
+          {activeTab === 'certs' && localData.certifications && (
             <div className="admin-card">
-              <h2 className="admin-card-title">Certifications Header Info</h2>
+              <h2 className="admin-card-title">Certifications Configuration</h2>
+              
               <div className="admin-grid-3">
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Badge</label>
-                  <input type="text" className="admin-input" value={localData.certifications.badge} onChange={(e) => {
-                    setLocalData(prev => ({
-                      ...prev,
-                      certifications: { ...prev.certifications, badge: e.target.value }
-                    }));
-                  }} />
+                  <label className="admin-label">Badge Text</label>
+                  <input type="text" className="admin-input" value={localData.certifications.badge} onChange={(e) => handleNestedChange('certifications', 'badge', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
                   <label className="admin-label">Section Title</label>
-                  <input type="text" className="admin-input" value={localData.certifications.title} onChange={(e) => {
-                    setLocalData(prev => ({
-                      ...prev,
-                      certifications: { ...prev.certifications, title: e.target.value }
-                    }));
-                  }} />
+                  <input type="text" className="admin-input" value={localData.certifications.title} onChange={(e) => handleNestedChange('certifications', 'title', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Subtitle</label>
-                  <input type="text" className="admin-input" value={localData.certifications.subtitle} onChange={(e) => {
-                    setLocalData(prev => ({
-                      ...prev,
-                      certifications: { ...prev.certifications, subtitle: e.target.value }
-                    }));
-                  }} />
+                  <label className="admin-label">Subtitle Description</label>
+                  <input type="text" className="admin-input" value={localData.certifications.subtitle} onChange={(e) => handleNestedChange('certifications', 'subtitle', e.target.value)} />
                 </div>
               </div>
 
-              <div className="admin-card-header-flex mt-6">
-                <h3 className="admin-subheading">Certificates List</h3>
-                <button onClick={addCert} className="admin-btn-secondary">+ Add Certificate</button>
+              <h3 className="admin-subheading mt-6">Official Certificates List</h3>
+              <div className="admin-certs-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {localData.certifications.list.map((cert, idx) => (
+                  <div key={idx} className="admin-subcard">
+                    <h4 className="admin-subcard-title">Certificate {idx + 1}</h4>
+                    <div className="admin-grid-3" style={{ gap: '0.75rem' }}>
+                      <div className="admin-form-group">
+                        <label className="admin-label">Certificate Title</label>
+                        <input type="text" className="admin-input" value={cert.title} onChange={(e) => updateCert(idx, 'title', e.target.value)} />
+                      </div>
+                      <div className="admin-form-group">
+                        <label className="admin-label">Icon (Emoji)</label>
+                        <input type="text" className="admin-input" value={cert.icon} onChange={(e) => updateCert(idx, 'icon', e.target.value)} />
+                      </div>
+                      <div className="admin-form-group">
+                        <label className="admin-label">PDF File Document Path / URL</label>
+                        <input type="text" className="admin-input" value={cert.pdfUrl || ''} onChange={(e) => updateCert(idx, 'pdfUrl', e.target.value)} />
+                      </div>
+                    </div>
+                    
+                    <div className="admin-form-group">
+                      <label className="admin-label">Brief Description (Shown on Card)</label>
+                      <input type="text" className="admin-input" value={cert.shortDesc} onChange={(e) => updateCert(idx, 'shortDesc', e.target.value)} />
+                    </div>
+                    
+                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                      <label className="admin-label">Detailed Description (Shown inside PDF Viewer Modal)</label>
+                      <textarea className="admin-textarea" style={{ minHeight: '80px' }} value={cert.longDesc} onChange={(e) => updateCert(idx, 'longDesc', e.target.value)} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* EU CLIENTS TAB */}
+          {activeTab === 'clients' && localData.clients && (
+            <div className="admin-card">
+              <h2 className="admin-card-title">European Market Presence & Target Countries</h2>
+              
+              <div className="admin-grid-3">
+                <div className="admin-form-group">
+                  <label className="admin-label">Badge Text</label>
+                  <input type="text" className="admin-input" value={localData.clients.badge || ''} onChange={(e) => handleNestedChange('clients', 'badge', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">Headline Count Text</label>
+                  <input type="text" className="admin-input" value={localData.clients.title || ''} onChange={(e) => handleNestedChange('clients', 'title', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">Subtitle Description</label>
+                  <input type="text" className="admin-input" value={localData.clients.subtitle || ''} onChange={(e) => handleNestedChange('clients', 'subtitle', e.target.value)} />
+                </div>
               </div>
 
-              <div className="admin-cert-list">
-                {localData.certifications.list.map((cert, index) => (
-                  <div key={cert.id} className="admin-cert-card-item">
-                    <div className="admin-grid-4">
-                      <div className="admin-form-group">
-                        <label className="admin-label">Cert Emoji Icon</label>
-                        <input type="text" className="admin-input" value={cert.icon} onChange={(e) => updateCert(index, 'icon', e.target.value)} />
+              <h3 className="admin-subheading mt-6">Target Countries / Flags ({localData.clients.countries.length} Markets)</h3>
+              <div className="admin-countries-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
+                {localData.clients.countries.map((country, idx) => (
+                  <div key={idx} className="admin-subcard" style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+                    <div className="admin-grid-2" style={{ flexGrow: 1, gap: '0.5rem' }}>
+                      <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                        <label className="admin-label">Country Name</label>
+                        <input type="text" className="admin-input" value={country.name} onChange={(e) => updateClientCountry(idx, 'name', e.target.value)} />
                       </div>
-                      <div className="admin-form-group">
-                        <label className="admin-label">Cert Title/Standard</label>
-                        <input type="text" className="admin-input" value={cert.title} onChange={(e) => updateCert(index, 'title', e.target.value)} />
-                      </div>
-                      <div className="admin-form-group" style={{ gridColumn: 'span 2' }}>
-                        <label className="admin-label">PDF File Path/URL</label>
-                        <input type="text" className="admin-input" value={cert.pdfUrl || ''} onChange={(e) => updateCert(index, 'pdfUrl', e.target.value)} />
+                      <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                        <label className="admin-label">Flag Code (ISO-2)</label>
+                        <input type="text" className="admin-input" value={country.code} onChange={(e) => updateClientCountry(idx, 'code', e.target.value)} />
                       </div>
                     </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Short Summary (Grid card)</label>
-                      <input type="text" className="admin-input" value={cert.shortDesc} onChange={(e) => updateCert(index, 'shortDesc', e.target.value)} />
-                    </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Detailed Explanation (Modal overlay)</label>
-                      <textarea className="admin-textarea" value={cert.longDesc} onChange={(e) => updateCert(index, 'longDesc', e.target.value)} />
-                    </div>
-                    <button type="button" onClick={() => removeCert(cert.id)} className="admin-btn-danger" style={{ alignSelf: 'flex-end', marginTop: '0.5rem' }}>
-                      Delete Certificate
+                    <button 
+                      onClick={() => removeClientCountry(idx)} 
+                      className="admin-btn-secondary" 
+                      style={{ padding: '0.5rem 0.75rem', border: '1px solid #ef4444', color: '#ef4444', height: 'fit-content' }}
+                    >
+                      Delete
                     </button>
                   </div>
                 ))}
               </div>
+              <button onClick={addClientCountry} className="admin-btn-secondary mt-4" style={{ width: '100%', borderStyle: 'dashed', color: 'var(--accent)' }}>
+                + Add Target Country
+              </button>
+            </div>
+          )}
 
-              <h3 className="admin-subheading mt-8">Certifications Page Stats Grid</h3>
-              <div className="admin-grid-4">
-                {localData.certifications.stats.map((stat, i) => (
-                  <div key={i} className="admin-subcard">
-                    <h4 className="admin-subcard-title">Stat Card {i+1}</h4>
+          {/* SOURCING PROCESS TAB */}
+          {activeTab === 'sourcing' && localData.sourcing && (
+            <div className="admin-card">
+              <h2 className="admin-card-title">Sourcing FAQs Configuration</h2>
+              <p className="admin-helper-text" style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                Define frequently asked questions and answers related to sourcing and anti-dumping duties.
+              </p>
+
+              <div className="admin-sourcing-steps" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {localData.sourcing.map((step, idx) => (
+                  <div key={idx} className="admin-subcard">
+                    <h4 className="admin-subcard-title" style={{ color: 'var(--accent)' }}>
+                      FAQ Item {idx + 1}
+                    </h4>
                     <div className="admin-form-group">
-                      <label className="admin-label">Number Value</label>
-                      <input type="number" className="admin-input" value={stat.number} onChange={(e) => {
-                        const newStats = [...localData.certifications.stats];
-                        newStats[i].number = parseInt(e.target.value) || 0;
-                        setLocalData(prev => ({
-                          ...prev,
-                          certifications: { ...prev.certifications, stats: newStats }
-                        }));
-                      }} />
+                      <label className="admin-label">Question (Câu hỏi)</label>
+                      <input type="text" className="admin-input" value={step.title} onChange={(e) => updateSourcingStep(idx, 'title', e.target.value)} />
                     </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Suffix (e.g. +, %)</label>
-                      <input type="text" className="admin-input" value={stat.suffix} onChange={(e) => {
-                        const newStats = [...localData.certifications.stats];
-                        newStats[i].suffix = e.target.value;
-                        setLocalData(prev => ({
-                          ...prev,
-                          certifications: { ...prev.certifications, stats: newStats }
-                        }));
-                      }} />
-                    </div>
-                    <div className="admin-form-group">
-                      <label className="admin-label">Label Description</label>
-                      <input type="text" className="admin-input" value={stat.label} onChange={(e) => {
-                        const newStats = [...localData.certifications.stats];
-                        newStats[i].label = e.target.value;
-                        setLocalData(prev => ({
-                          ...prev,
-                          certifications: { ...prev.certifications, stats: newStats }
-                        }));
-                      }} />
+                    <div className="admin-form-group" style={{ marginBottom: 0 }}>
+                      <label className="admin-label">Answer (Câu trả lời)</label>
+                      <textarea className="admin-textarea" style={{ minHeight: '60px' }} value={step.desc} onChange={(e) => updateSourcingStep(idx, 'desc', e.target.value)} />
                     </div>
                   </div>
                 ))}
@@ -687,124 +639,75 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* CONTACT TAB */}
-          {activeTab === 'contact' && (
+          {/* QUOTATION & CONTACT TAB */}
+          {activeTab === 'contact' && localData.contact && (
             <div className="admin-card">
-              <h2 className="admin-card-title">Contact Form & Footers</h2>
+              <h2 className="admin-card-title">Quotation & Contact Section Config</h2>
+              
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Badge</label>
-                  <input type="text" className="admin-input" value={localData.contact.badge} onChange={(e) => handleNestedChange('contact', 'badge', e.target.value)} />
+                  <label className="admin-label">Contact badge</label>
+                  <input type="text" className="admin-input" value={localData.contact.badge || ''} onChange={(e) => handleNestedChange('contact', 'badge', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Section Title Banner</label>
-                  <input type="text" className="admin-input" value={localData.contact.title} onChange={(e) => handleNestedChange('contact', 'title', e.target.value)} />
+                  <label className="admin-label">Contact main title</label>
+                  <input type="text" className="admin-input" value={localData.contact.title || ''} onChange={(e) => handleNestedChange('contact', 'title', e.target.value)} />
                 </div>
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Section Subtitle Text</label>
-                <input type="text" className="admin-input" value={localData.contact.subtitle} onChange={(e) => handleNestedChange('contact', 'subtitle', e.target.value)} />
+                <label className="admin-label">Subtitle Intro text</label>
+                <textarea className="admin-textarea" value={localData.contact.subtitle || ''} onChange={(e) => handleNestedChange('contact', 'subtitle', e.target.value)} />
               </div>
 
-              <h3 className="admin-subheading mt-6">Address & Phone details</h3>
+              <div className="admin-form-group">
+                <label className="admin-label">Checklist of Sourcing Information Needed (One requirement per line)</label>
+                <textarea 
+                  className="admin-textarea" 
+                  style={{ minHeight: '120px' }}
+                  value={localData.contact.infoNeeded?.join('\n') || ''} 
+                  onChange={(e) => {
+                    const list = e.target.value.split('\n').filter(l => l.trim() !== '');
+                    handleNestedChange('contact', 'infoNeeded', list);
+                  }}
+                />
+              </div>
+
+              <h3 className="admin-subheading mt-6">Contact details & Quick links</h3>
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Physical Address</label>
-                  <input type="text" className="admin-input" value={localData.contact.address} onChange={(e) => handleNestedChange('contact', 'address', e.target.value)} />
+                  <label className="admin-label">Email Address</label>
+                  <input type="email" className="admin-input" value={localData.contact.email} onChange={(e) => handleNestedChange('contact', 'email', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Contact Email Address</label>
-                  <input type="email" className="admin-input" value={localData.contact.email} onChange={(e) => handleNestedChange('contact', 'email', e.target.value)} />
+                  <label className="admin-label">WhatsApp Mobile Phone</label>
+                  <input type="text" className="admin-input" value={localData.contact.phone} onChange={(e) => handleNestedChange('contact', 'phone', e.target.value)} />
                 </div>
               </div>
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Contact Phone Number</label>
-                  <input type="text" className="admin-input" value={localData.contact.phone} onChange={(e) => handleNestedChange('contact', 'phone', e.target.value)} />
+                  <label className="admin-label">Zalo Link URL</label>
+                  <input type="text" className="admin-input" value={localData.contact.zaloLink || ''} onChange={(e) => handleNestedChange('contact', 'zaloLink', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Working Hours Schedule</label>
+                  <label className="admin-label">Working Hours</label>
                   <input type="text" className="admin-input" value={localData.contact.workingHours} onChange={(e) => handleNestedChange('contact', 'workingHours', e.target.value)} />
                 </div>
               </div>
-
-              <h3 className="admin-subheading mt-6">Quick Contact Links & Email Template</h3>
               <div className="admin-form-group">
-                <label className="admin-label">Zalo Link/Phone (e.g., https://zalo.me/0987654321)</label>
-                <input type="text" className="admin-input" value={localData.contact.zaloLink || ''} onChange={(e) => handleNestedChange('contact', 'zaloLink', e.target.value)} />
+                <label className="admin-label">Corporate Office & Factory Location</label>
+                <input type="text" className="admin-input" value={localData.contact.address} onChange={(e) => handleNestedChange('contact', 'address', e.target.value)} />
               </div>
+
+              <h3 className="admin-subheading mt-6">SMTP E-mail Notification Config (When client submits RFQ)</h3>
               <div className="admin-grid-2">
                 <div className="admin-form-group">
-                  <label className="admin-label">Email Template: Subject Title</label>
+                  <label className="admin-label">Default Email Subject Line</label>
                   <input type="text" className="admin-input" value={localData.contact.emailSubject || ''} onChange={(e) => handleNestedChange('contact', 'emailSubject', e.target.value)} />
                 </div>
                 <div className="admin-form-group">
-                  <label className="admin-label">Email Template: Body Content</label>
-                  <textarea className="admin-textarea" value={localData.contact.emailBody || ''} onChange={(e) => handleNestedChange('contact', 'emailBody', e.target.value)} />
+                  <label className="admin-label">Email template placeholder text</label>
+                  <input type="text" className="admin-input" value={localData.contact.emailBody || ''} onChange={(e) => handleNestedChange('contact', 'emailBody', e.target.value)} />
                 </div>
-              </div>
-            </div>
-          )}
-
-          {/* SETTINGS TAB */}
-          {activeTab === 'settings' && (
-            <div className="admin-card">
-              <h2 className="admin-card-title">Portfolio Settings & Tools</h2>
-              <p className="admin-card-desc" style={{ marginBottom: '2rem' }}>
-                Use these tools to back up your current portfolio database or restore it to initial factory settings.
-              </p>
-
-              <div className="admin-settings-row">
-                <div className="settings-desc">
-                  <strong>Export Portfolio JSON Configuration</strong>
-                  <p>Download a backup copy of your customized texts, statistics, products, and certifications to your computer.</p>
-                </div>
-                <button onClick={exportJson} className="admin-btn-secondary">Export JSON</button>
-              </div>
-
-              <div className="admin-settings-row">
-                <div className="settings-desc">
-                  <strong>Import Portfolio Configuration</strong>
-                  <p>Upload a JSON configuration file to overwrite your current browser changes before saving.</p>
-                </div>
-                <input 
-                  type="file" 
-                  accept=".json" 
-                  id="admin-import-file" 
-                  style={{ display: 'none' }} 
-                  onChange={(e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        try {
-                          const parsed = JSON.parse(event.target.result);
-                          // basic validation
-                          if (parsed.hero && parsed.about && parsed.products) {
-                            setLocalData(parsed);
-                            setSaveStatus({ type: 'success', message: 'Config loaded in editor. Remember to click Save Changes to upload to MongoDB Atlas!' });
-                          } else {
-                            alert("Invalid configuration file format!");
-                          }
-                        } catch (err) {
-                          alert("Error parsing JSON file: " + err.message);
-                        }
-                      };
-                      reader.readAsText(file);
-                    }
-                  }}
-                />
-                <button onClick={() => document.getElementById('admin-import-file').click()} className="admin-btn-secondary">Import JSON</button>
-              </div>
-
-              <div className="admin-settings-row" style={{ borderBottom: 'none', marginTop: '2rem' }}>
-                <div className="settings-desc">
-                  <strong>Reset Database to Factory Defaults</strong>
-                  <p style={{ color: 'var(--text-light)' }}>
-                    Overwrite MongoDB Atlas content with default corporate DrillMaco dataset. All customized progress will be deleted.
-                  </p>
-                </div>
-                <button onClick={handleReset} className="admin-btn-danger">Reset to Defaults</button>
               </div>
             </div>
           )}
@@ -812,52 +715,93 @@ export default function AdminDashboard() {
           {/* INQUIRIES TAB */}
           {activeTab === 'inquiries' && (
             <div className="admin-card">
-              <h2 className="admin-card-title">{"\uD83D\uDCEC "} Khách hàng liên hệ (Leads)</h2>
-              <p className="admin-card-desc" style={{ marginBottom: '2rem' }}>
-                Danh sách các tin nhắn gửi từ form liên hệ "Send Us an Inquiry" trên trang chủ.
-              </p>
-
+              <h2 className="admin-card-title">Khách hàng liên hệ ({inquiries.length} submissions)</h2>
+              
               {inquiriesLoading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem' }}>
-                  <div className="admin-spinner"></div>
+                <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+                  <div className="admin-spinner" style={{ margin: '0 auto 1rem auto' }}></div>
+                  <p>Fetching contact inquiries from MongoDB...</p>
                 </div>
               ) : inquiries.length === 0 ? (
-                <div style={{ textAlign: 'center', padding: '4rem 2rem', color: '#64748b' }}>
-                  <span style={{ fontSize: '3rem', display: 'block', marginBottom: '1rem' }}>{"\uD83D\uDCED"}</span>
-                  <p>Chưa có liên hệ nào được gửi từ khách hàng.</p>
+                <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b', border: '1px dashed rgba(255,255,255,0.06)', borderRadius: '12px' }}>
+                  📥 Hộp thư rỗng. Chưa có khách hàng gửi liên hệ.
                 </div>
               ) : (
-                <div className="admin-inquiries-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                  {inquiries.map((inq) => (
-                    <div key={inq._id} className="admin-subcard" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', border: '1px solid rgba(255, 255, 255, 0.05)', background: 'rgba(15, 23, 42, 0.3)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', borderBottom: '1px solid rgba(255, 255, 255, 0.05)', paddingBottom: '0.75rem' }}>
+                <div className="admin-inquiries-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  {inquiries.map((inq, idx) => (
+                    <div key={inq._id} className="admin-inquiry-card" style={{
+                      background: 'rgba(15, 23, 42, 0.35)',
+                      border: '1px solid rgba(255,255,255,0.05)',
+                      borderRadius: '12px',
+                      padding: '1.5rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.75rem'
+                    }}>
+                      <div className="inquiry-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
-                          <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1.1rem', color: '#f8fafc' }}>
-                            {inq.name} <span style={{ fontSize: '0.85rem', fontWeight: 'normal', color: '#94a3b8' }}>({inq.company || 'Cá nhân'})</span>
-                          </h4>
-                          <div style={{ display: 'flex', gap: '1rem', fontSize: '0.85rem', color: '#64748b', flexWrap: 'wrap' }}>
-                            <span>{"\uD83D\uDCE7 "} <a href={`mailto:${inq.email}`} style={{ color: '#3b82f6', textDecoration: 'none' }}>{inq.email}</a></span>
-                            {inq.phone && <span>{"\uD83D\uDCDE "} <a href={`tel:${inq.phone}`} style={{ color: '#3b82f6', textDecoration: 'none' }}>{inq.phone}</a></span>}
-                            <span>{"\uD83D\uDCC5 "} {new Date(inq.createdAt).toLocaleString('vi-VN')}</span>
-                          </div>
+                          <h4 style={{ color: 'var(--white)', fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>{inq.name}</h4>
+                          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Submitted on: {new Date(inq.createdAt).toLocaleString()}</span>
                         </div>
-                        <button onClick={() => handleDeleteInquiry(inq._id)} className="admin-btn-danger" style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', borderRadius: '6px' }}>
+                        <button 
+                          onClick={() => handleDeleteInquiry(inq._id)} 
+                          className="admin-btn-secondary" 
+                          style={{ padding: '0.4rem 0.75rem', border: '1px solid #ef4444', color: '#ef4444', fontSize: '0.8rem' }}
+                        >
                           Xóa liên hệ
                         </button>
                       </div>
-                      
-                      <div>
-                        <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: '#cbd5e1', marginBottom: '0.5rem' }}>
-                          Tiêu đề: {inq.subject}
-                        </div>
-                        <div style={{ fontSize: '0.9rem', color: '#94a3b8', background: 'rgba(0, 0, 0, 0.2)', padding: '1rem', borderRadius: '8px', whiteSpace: 'pre-wrap', lineHeight: '1.5' }}>
-                          {inq.message}
-                        </div>
+
+                      <div className="inquiry-card-grid" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: '0.75rem',
+                        fontSize: '0.85rem',
+                        background: 'rgba(0,0,0,0.15)',
+                        padding: '1rem',
+                        borderRadius: '8px'
+                      }}>
+                        <div><strong>Email:</strong> <a href={`mailto:${inq.email}`} style={{ color: 'var(--accent)' }}>{inq.email}</a></div>
+                        <div><strong>Phone:</strong> {inq.phone || 'N/A'}</div>
+                        <div><strong>Company:</strong> {inq.company || 'N/A'}</div>
+                        <div><strong>Subject:</strong> {inq.subject}</div>
+                      </div>
+
+                      <div className="inquiry-card-message" style={{
+                        fontSize: '0.9rem',
+                        color: '#cbd5e1',
+                        background: 'rgba(0,0,0,0.1)',
+                        padding: '1rem',
+                        borderRadius: '8px',
+                        whiteSpace: 'pre-wrap',
+                        borderLeft: '3px solid var(--accent)'
+                      }}>
+                        {inq.message}
                       </div>
                     </div>
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* SYSTEM SETTINGS TAB */}
+          {activeTab === 'settings' && (
+            <div className="admin-card">
+              <h2 className="admin-card-title">System Settings</h2>
+              <p className="admin-helper-text" style={{ color: '#94a3b8', fontSize: '0.85rem', marginBottom: '2rem' }}>
+                Reset configuration defaults or adjust server settings.
+              </p>
+
+              <div className="admin-subcard" style={{ border: '1px solid rgba(239, 68, 68, 0.2)', background: 'rgba(239, 68, 68, 0.03)' }}>
+                <h3 className="admin-subcard-title" style={{ color: '#ef4444' }}>Danger Zone</h3>
+                <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '1.25rem' }}>
+                  Clicking the button below will reset your portfolio database to original factory defaults. Your current custom text edits and products will be permanently overwritten.
+                </p>
+                <button onClick={handleReset} className="admin-btn-secondary" style={{ border: '1px solid #ef4444', color: '#ef4444' }}>
+                  Reset Entire Database to Defaults
+                </button>
+              </div>
             </div>
           )}
         </main>
