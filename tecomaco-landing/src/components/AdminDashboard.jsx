@@ -13,6 +13,15 @@ function convertGoogleDriveUrl(url) {
   return url;
 }
 
+// Utility: convert local factory path to optimized thumbnail path for previewing in admin panel
+function getAdminPreviewUrl(src) {
+  if (!src) return '';
+  if (src.includes('/images/factory/') && !src.includes('/images/factory/thumb/') && !src.includes('/images/factory/full/')) {
+    return src.replace('/images/factory/', '/images/factory/thumb/');
+  }
+  return src;
+}
+
 export default function AdminDashboard() {
   const { data, loading, error, updatePortfolio, resetToDefault, isAuthenticated, logout, getInquiries, deleteInquiry } = usePortfolio();
   const [activeTab, setActiveTab] = useState('hero');
@@ -308,7 +317,21 @@ export default function AdminDashboard() {
 
               <div className="admin-form-group">
                 <label className="admin-label">Company Image Path / URL (Left Card Image)</label>
-                <input type="text" className="admin-input" value={localData.hero.companyImage || ''} onChange={(e) => handleNestedChange('hero', 'companyImage', convertGoogleDriveUrl(e.target.value))} />
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ width: '80px', height: '60px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-alt)', overflow: 'hidden', flexShrink: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {localData.hero.companyImage ? (
+                      <img 
+                        src={getAdminPreviewUrl(localData.hero.companyImage)} 
+                        alt="Company Preview" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>No Image</span>
+                    )}
+                  </div>
+                  <input type="text" className="admin-input" value={localData.hero.companyImage || ''} onChange={(e) => handleNestedChange('hero', 'companyImage', convertGoogleDriveUrl(e.target.value))} />
+                </div>
               </div>
 
               <h3 className="admin-subheading mt-6">Right Side: Sourcing Manager (Orin Bui)</h3>
@@ -330,10 +353,24 @@ export default function AdminDashboard() {
               </div>
               <div className="admin-form-group">
                 <label className="admin-label">Photo Path / URL</label>
-                <input type="text" className="admin-input" value={localData.hero.me?.photo || ''} onChange={(e) => {
-                  const newMe = { ...localData.hero.me, photo: convertGoogleDriveUrl(e.target.value) };
-                  handleNestedChange('hero', 'me', newMe);
-                }} />
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ width: '50px', height: '60px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--surface-alt)', overflow: 'hidden', flexShrink: 0, background: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {localData.hero.me?.photo ? (
+                      <img 
+                        src={getAdminPreviewUrl(localData.hero.me.photo)} 
+                        alt="Avatar Preview" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>No Photo</span>
+                    )}
+                  </div>
+                  <input type="text" className="admin-input" value={localData.hero.me?.photo || ''} onChange={(e) => {
+                    const newMe = { ...localData.hero.me, photo: convertGoogleDriveUrl(e.target.value) };
+                    handleNestedChange('hero', 'me', newMe);
+                  }} />
+                </div>
               </div>
 
               <div className="admin-form-group">
@@ -491,7 +528,7 @@ export default function AdminDashboard() {
                 {localData.factory.gallery.map((img, idx) => (
                   <div key={idx} className="admin-subcard" style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
                     <div className="gallery-preview-wrapper" style={{ width: '80px', height: '60px', overflow: 'hidden', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
-                      <img src={img.src} alt={img.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={getAdminPreviewUrl(img.src)} alt={img.alt} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.style.opacity = 0.3; }} />
                     </div>
                     <div className="admin-grid-2" style={{ flexGrow: 1, gap: '0.75rem' }}>
                       <div className="admin-form-group" style={{ marginBottom: 0 }}>
