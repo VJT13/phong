@@ -11,7 +11,7 @@ const fadeUp = {
 };
 
 export default function HeroSection() {
-  const { data } = usePortfolio();
+  const { data, isSiteReady } = usePortfolio();
   const { hero } = data;
 
   if (!hero) return null;
@@ -27,7 +27,7 @@ export default function HeroSection() {
         <motion.div 
           className="hero-split-left"
           initial="hidden"
-          animate="visible"
+          animate={isSiteReady ? "visible" : "hidden"}
           variants={fadeUp}
           custom={0}
         >
@@ -80,7 +80,7 @@ export default function HeroSection() {
         <motion.div 
           className="hero-split-right"
           initial="hidden"
-          animate="visible"
+          animate={isSiteReady ? "visible" : "hidden"}
           variants={fadeUp}
           custom={2}
         >

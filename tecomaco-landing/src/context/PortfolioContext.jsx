@@ -168,6 +168,7 @@ export function PortfolioProvider({ children }) {
   };
 
   const [highlightedCategory, setHighlightedCategory] = useState(null);
+  const [loaderTimeDone, setLoaderTimeDone] = useState(false);
 
   const triggerHighlight = (categoryName) => {
     setHighlightedCategory(categoryName);
@@ -178,7 +179,13 @@ export function PortfolioProvider({ children }) {
 
   useEffect(() => {
     fetchPortfolioData();
+    const timer = setTimeout(() => {
+      setLoaderTimeDone(true);
+    }, 1200); // Tải trang snappier (1.2 giây)
+    return () => clearTimeout(timer);
   }, []);
+
+  const isSiteReady = loaderTimeDone;
 
   return (
     <PortfolioContext.Provider value={{ 
@@ -195,7 +202,8 @@ export function PortfolioProvider({ children }) {
       deleteInquiry,
       refreshData: fetchPortfolioData,
       highlightedCategory,
-      triggerHighlight
+      triggerHighlight,
+      isSiteReady
     }}>
       {children}
     </PortfolioContext.Provider>

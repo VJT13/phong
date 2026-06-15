@@ -14,8 +14,7 @@ import AdminDashboard from './components/AdminDashboard';
 import FloatingContact from './components/FloatingContact';
 
 function AppContent() {
-  const { loading: dbLoading } = usePortfolio();
-  const [loaderTimeDone, setLoaderTimeDone] = useState(false);
+  const { isSiteReady } = usePortfolio();
   const [currentRoute, setCurrentRoute] = useState(window.location.hash || '#/');
 
   // Route listener for hash navigation
@@ -27,45 +26,35 @@ function AppContent() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Minimum loader display duration for premium feeling
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoaderTimeDone(true);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const showLoader = dbLoading || !loaderTimeDone;
+  const showLoader = !isSiteReady;
 
   return (
     <>
-      {/* Premium Page Loader */}
-      <div className={`page-loader ${!showLoader ? 'loaded' : ''}`}>
-        <div className="loader-logo">Orin<span>Bui</span></div>
-        <div className="loader-bar">
-          <div className="loader-bar-fill"></div>
-        </div>
-      </div>
+      {currentRoute === '#/admin' ? (
+        <AdminDashboard />
+      ) : (
+        <>
+          {/* Premium Page Loader */}
+          <div className={`page-loader ${!showLoader ? 'loaded' : ''}`}>
+            <div className="loader-logo">Orin<span>Bui</span></div>
+            <div className="loader-bar">
+              <div className="loader-bar-fill"></div>
+            </div>
+          </div>
 
-      {/* Main Content Router */}
-      {!showLoader && (
-        currentRoute === '#/admin' ? (
-          <AdminDashboard />
-        ) : (
-          <>
-            <Navbar />
-            <HeroSection />
-            <ProductsSection />
-            <AdvantagesSection />
-            <FactoryGallerySection />
-            <CertificationsSection />
-            <ClientFlagsSection />
-            <SourcingSupportSection />
-            <ContactSection />
-            <Footer />
-            <FloatingContact />
-          </>
-        )
+          {/* Main Landing Page mounted in background */}
+          <Navbar />
+          <HeroSection />
+          <ProductsSection />
+          <AdvantagesSection />
+          <FactoryGallerySection />
+          <CertificationsSection />
+          <ClientFlagsSection />
+          <SourcingSupportSection />
+          <ContactSection />
+          <Footer />
+          <FloatingContact />
+        </>
       )}
     </>
   );
