@@ -37,6 +37,9 @@ export default function ContactSection() {
       });
       
       const result = await response.json();
+      console.log('=== CONTACT FORM SUBMISSION RESULT ===');
+      console.log(result);
+      console.log('=======================================');
       if (response.ok) {
         setStatusMsg({ type: 'success', text: 'Cảm ơn bạn! Lời nhắn của bạn đã được gửi thành công.' });
         setFormData({ name: '', email: '', company: '', phone: '', subject: '', message: '' });

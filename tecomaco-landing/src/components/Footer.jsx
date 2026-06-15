@@ -23,7 +23,7 @@ export default function Footer() {
             <div className="nav-logo-text">ORIN<span>BUI</span></div>
           </div>
           <p>
-            Premier threaded rod and custom fastener manufacturing partner based in Vietnam. 
+            Premier threaded rod and custom fastener manufacturing partner based in Vietnam.
             Precision engineering, global compliance, and stable supply chains for distributors worldwide.
           </p>
           <div className="footer-social">
@@ -73,7 +73,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="footer-bottom">
+      {/* <div className="footer-bottom">
         <span>
           © {new Date().getFullYear()} ORINBUI. All rights reserved.
           <a href="#/admin" style={{ color: 'var(--accent)', marginLeft: '1rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -81,7 +81,7 @@ export default function Footer() {
           </a>
         </span>
         <span>Precision Fastening Solutions — Made in Vietnam</span>
-      </div>
+      </div> */}
     </footer>
   );
 }

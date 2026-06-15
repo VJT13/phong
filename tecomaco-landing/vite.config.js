@@ -10,8 +10,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        // target: 'http://localhost:5000',
-        target: 'https://phongbui-portfolio.vercel.app',
+        target: 'http://localhost:5000',
+        // target: 'https://phongbui-portfolio.vercel.app',
         changeOrigin: true,
       }
     }

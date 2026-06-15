@@ -207,7 +207,9 @@ app.post('/api/inquiries', async (req, res) => {
     const newInquiry = new Inquiry({ name, email, company, phone, subject, message });
     await newInquiry.save();
 
-    // Trigger email notification asynchronously if SMTP configured
+    let emailStatus = { sent: false, error: null, info: null };
+
+    // Trigger email notification if SMTP configured
     if (transporter) {
       // Fetch destination email from active Portfolio configuration (contact.email)
       let destinationEmail = EMAIL_USER;
@@ -215,10 +217,15 @@ app.post('/api/inquiries', async (req, res) => {
         const portfolio = await Portfolio.findOne().sort({ createdAt: -1 });
         if (portfolio && portfolio.contact && portfolio.contact.email) {
           destinationEmail = portfolio.contact.email;
+          console.log("Nodemailer: Successfully retrieved contact email from database:", destinationEmail);
+        } else {
+          console.warn("Nodemailer: contact.email not found in database. Falling back to EMAIL_USER:", EMAIL_USER);
         }
       } catch (dbErr) {
-        console.error("Error fetching destination email from portfolio:", dbErr.message);
+        console.error("Nodemailer: Error fetching destination email from portfolio:", dbErr.message);
       }
+
+      console.log("Nodemailer: Attempting to send email from", EMAIL_USER, "to", destinationEmail);
 
       const mailOptions = {
         from: EMAIL_USER,
@@ -260,16 +267,23 @@ app.post('/api/inquiries', async (req, res) => {
         `
       };
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Nodemailer: Error sending notification email:", error.message);
-        } else {
-          console.log("Nodemailer: Email notification sent successfully:", info.response);
-        }
-      });
+      try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Nodemailer: Email notification sent successfully:", info.response);
+        emailStatus = { sent: true, to: destinationEmail, response: info.response };
+      } catch (mailErr) {
+        console.error("Nodemailer: Error sending notification email:", mailErr.message);
+        emailStatus = { sent: false, to: destinationEmail, error: mailErr.message };
+      }
+    } else {
+      emailStatus = { sent: false, error: "Nodemailer transporter not configured" };
     }
 
-    res.status(200).json({ success: true, message: "Yêu cầu liên hệ của bạn đã được gửi thành công!" });
+    res.status(200).json({ 
+      success: true, 
+      message: "Yêu cầu liên hệ của bạn đã được gửi thành công!",
+      emailDebug: emailStatus
+    });
   } catch (err) {
     res.status(500).json({ error: "Server error saving inquiry", message: err.message });
   }
