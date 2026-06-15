@@ -212,28 +212,32 @@ export const defaultData = {
   },
   sourcing: [
     {
-      title: "Are Vietnam-made threaded rods subject to EU anti-dumping duties?",
-      desc: "No. Threaded rods and fasteners manufactured in Vietnam are NOT subject to the high EU anti-dumping duties applied to Chinese-origin products (which can exceed 60%). We provide full Certificates of Origin (Form A / Form EUR.1) to verify Vietnamese manufacturing origin and secure tax-free import for EU importers."
+      title: "Who will be my contact person?",
+      desc: "You will work directly with Orin Bui throughout quotation, production, documentation and shipment coordination."
     },
     {
-      title: "What international standards and steel grades can you manufacture?",
-      desc: "We manufacture threaded rods and studs in accordance with international standards, mainly DIN 975, DIN 976, and ASTM A193. Available steel grades include Carbon Steel (grades 4.8, 5.8, 8.8, 10.9) and Stainless Steel (A2/304, A4/316)."
+      title: "MOQ?",
+      desc: "Our Minimum Order Quantity (MOQ) depends on the size and grade, generally starting from 1 ton per size, or a total of 1 full 20ft container (approx. 20-25 tons) for optimal shipping costs."
     },
     {
-      title: "What types of surface coatings do you offer for threaded rods?",
-      desc: "We offer multiple surface finishes depending on your application: Zinc Plated (Electro-galvanized), Hot Dip Galvanized (HDG), Black Oxide, and Yellow Zinc Plating. All finishes comply with EU environmental standards (RoHS)."
+      title: "Sample?",
+      desc: "Yes, we can provide samples for quality evaluation and testing before placing a bulk order. Standard samples are free of charge, and the customer only covers the express courier cost."
     },
     {
-      title: "Do you provide quality certifications and test reports with shipments?",
-      desc: "Yes, every shipment comes with full documentation: Mill Test Certificates (MTC) conforming to EN 10204 3.1, dimensional inspection reports, plating thickness reports, and ISO 9001 / ISO 14001 factory compliance documents."
+      title: "OEM Packaging?",
+      desc: "Absolutely. We support customized packaging options such as cardboard tubes, wooden crates, bundles wrapped in plastic, and customized labels with your logo, part numbers, and barcodes for direct shelf-distribution."
     },
     {
-      title: "What is the typical production lead time and MOQ for EU orders?",
-      desc: "The typical production lead time is 30 to 45 days after deposit confirmation, depending on the volume and specifications. Our Minimum Order Quantity (MOQ) depends on the size and grade, generally starting from 1 ton per size or a total of 1 full 20ft container (approx. 20-25 tons) for optimal shipping costs."
+      title: "HDG ISO-Fit?",
+      desc: "Yes, we specialize in manufacturing Hot Dip Galvanized (HDG) threaded rods with ISO-Fit (overtapped) threads to ensure perfect mating and assembly after galvanizing, compliant with international standards."
     },
     {
-      title: "Can you customize packaging and labeling for European distributors?",
-      desc: "Absolutely. We support customized packaging options such as cardboard tubes, wooden crates, bundles wrapped in plastic, and customized labels with your logo, part numbers, and barcodes for direct shelf-distribution in Europe."
+      title: "Delivery Time?",
+      desc: "The typical production lead time is 30 to 45 days after deposit confirmation, depending on the volume and specifications."
+    },
+    {
+      title: "Payment Terms?",
+      desc: "Our standard payment terms are T/T (30% deposit, 70% against copy of B/L) or L/C at sight, subject to negotiation for long-term partners."
     }
   ],
   contact: {

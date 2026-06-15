@@ -3761,3 +3761,74 @@ h6 {
 .hero-company-image-container:hover .hero-company-image {
   transform: scale(1.04);
 }
+
+/* ===== WHY WORK WITH ME SECTION ===== */
+.why-me-section {
+  background: var(--surface);
+}
+
+.why-me-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.why-me-card {
+  background: var(--white);
+  border: 1px solid var(--surface-alt);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  gap: 1.25rem;
+  transition: var(--transition);
+}
+
+.why-me-icon-wrapper {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(13, 71, 161, 0.08);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.15rem;
+}
+
+.why-me-check {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.why-me-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.why-me-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.why-me-card-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .why-me-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .why-me-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}

@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import { usePortfolio } from '../context/PortfolioContext';
 import AdminLogin from './AdminLogin';
 
+// Utility: convert Google Drive shareable link to a direct viewable image url
+function convertGoogleDriveUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+  const driveRegExp = /(?:https?:\/\/)?(?:drive|docs)\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i;
+  const match = url.match(driveRegExp);
+  if (match && match[1]) {
+    return `https://lh3.googleusercontent.com/d/${match[1]}`;
+  }
+  return url;
+}
+
 export default function AdminDashboard() {
   const { data, loading, error, updatePortfolio, resetToDefault, isAuthenticated, logout, getInquiries, deleteInquiry } = usePortfolio();
   const [activeTab, setActiveTab] = useState('hero');
@@ -126,7 +137,10 @@ export default function AdminDashboard() {
   // Factory Gallery CRUD Managers
   const updateGalleryImage = (index, field, value) => {
     const newGallery = [...localData.factory.gallery];
-    newGallery[index][field] = value;
+    newGallery[index] = {
+      ...newGallery[index],
+      [field]: field === 'src' ? convertGoogleDriveUrl(value) : value
+    };
     setLocalData(prev => ({
       ...prev,
       factory: { ...prev.factory, gallery: newGallery }
@@ -294,7 +308,7 @@ export default function AdminDashboard() {
 
               <div className="admin-form-group">
                 <label className="admin-label">Company Image Path / URL (Left Card Image)</label>
-                <input type="text" className="admin-input" value={localData.hero.companyImage || ''} onChange={(e) => handleNestedChange('hero', 'companyImage', e.target.value)} />
+                <input type="text" className="admin-input" value={localData.hero.companyImage || ''} onChange={(e) => handleNestedChange('hero', 'companyImage', convertGoogleDriveUrl(e.target.value))} />
               </div>
 
               <h3 className="admin-subheading mt-6">Right Side: Sourcing Manager (Orin Bui)</h3>
@@ -317,7 +331,7 @@ export default function AdminDashboard() {
               <div className="admin-form-group">
                 <label className="admin-label">Photo Path / URL</label>
                 <input type="text" className="admin-input" value={localData.hero.me?.photo || ''} onChange={(e) => {
-                  const newMe = { ...localData.hero.me, photo: e.target.value };
+                  const newMe = { ...localData.hero.me, photo: convertGoogleDriveUrl(e.target.value) };
                   handleNestedChange('hero', 'me', newMe);
                 }} />
               </div>

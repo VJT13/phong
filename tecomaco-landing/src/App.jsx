@@ -13,6 +13,8 @@ import Footer from './components/Footer';
 import AdminDashboard from './components/AdminDashboard';
 import FloatingContact from './components/FloatingContact';
 
+import WhyMeSection from './components/WhyMeSection';
+
 function AppContent() {
   const { isSiteReady } = usePortfolio();
   const [currentRoute, setCurrentRoute] = useState(window.location.hash || '#/');
@@ -48,6 +50,7 @@ function AppContent() {
           <ProductsSection />
           <AdvantagesSection />
           <FactoryGallerySection />
+          <WhyMeSection />
           <CertificationsSection />
           <ClientFlagsSection />
           <SourcingSupportSection />
