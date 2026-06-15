@@ -3162,6 +3162,20 @@ h6 {
   margin-bottom: 3.5rem;
 }
 
+@media (max-width: 991px) {
+  .factory-info-stats {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .factory-info-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
 .factory-stat-box {
   background: var(--surface);
   border: 1px solid var(--surface-alt);
