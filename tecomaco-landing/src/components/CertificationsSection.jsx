@@ -9,6 +9,16 @@ const fadeIn = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
 
+function getDownloadUrl(url) {
+  if (!url) return '';
+  const driveRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+  const match = url.match(driveRegex);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+  }
+  return url;
+}
+
 function CertModal({ cert, onClose }) {
   if (!cert) return null;
   return (
@@ -41,11 +51,29 @@ function CertModal({ cert, onClose }) {
           </p>
           
           {cert.pdfUrl && (
-            <div className="pdf-viewer-container">
-              <iframe
-                src={`${cert.pdfUrl}#toolbar=0`}
-                title={`${cert.title} PDF Document`}
-              />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <a 
+                  href={getDownloadUrl(cert.pdfUrl)} 
+                  download 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="modal-body-download-btn"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Download Document
+                </a>
+              </div>
+              <div className="pdf-viewer-container">
+                <iframe
+                  src={`${cert.pdfUrl}#toolbar=0`}
+                  title={`${cert.title} Document`}
+                />
+              </div>
             </div>
           )}
         </div>

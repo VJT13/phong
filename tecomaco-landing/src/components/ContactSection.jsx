@@ -41,14 +41,14 @@ export default function ContactSection() {
       console.log(result);
       console.log('=======================================');
       if (response.ok) {
-        setStatusMsg({ type: 'success', text: 'Cảm ơn bạn! Lời nhắn của bạn đã được gửi thành công.' });
+        setStatusMsg({ type: 'success', text: 'Thank you! Your message has been sent successfully.' });
         setFormData({ name: '', email: '', company: '', phone: '', subject: '', message: '' });
       } else {
-        setStatusMsg({ type: 'error', text: result.error || 'Có lỗi xảy ra khi gửi tin nhắn.' });
+        setStatusMsg({ type: 'error', text: result.error || 'An error occurred while sending your message.' });
       }
     } catch (err) {
       console.error(err);
-      setStatusMsg({ type: 'error', text: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.' });
+      setStatusMsg({ type: 'error', text: 'Unable to connect to the server. Please try again later.' });
     } finally {
       setLoading(false);
       setTimeout(() => setStatusMsg({ type: '', text: '' }), 5000);
