@@ -685,6 +685,16 @@ export default function AdminDashboard() {
               </div>
               <div className="admin-grid-2">
                 <div className="admin-form-group">
+                  <label className="admin-label">WhatsApp Link URL</label>
+                  <input type="text" className="admin-input" value={localData.contact.whatsappLink || ''} onChange={(e) => handleNestedChange('contact', 'whatsappLink', e.target.value)} />
+                </div>
+                <div className="admin-form-group">
+                  <label className="admin-label">LinkedIn Link URL</label>
+                  <input type="text" className="admin-input" value={localData.contact.linkedinLink || ''} onChange={(e) => handleNestedChange('contact', 'linkedinLink', e.target.value)} />
+                </div>
+              </div>
+              <div className="admin-grid-2">
+                <div className="admin-form-group">
                   <label className="admin-label">Zalo Link URL</label>
                   <input type="text" className="admin-input" value={localData.contact.zaloLink || ''} onChange={(e) => handleNestedChange('contact', 'zaloLink', e.target.value)} />
                 </div>

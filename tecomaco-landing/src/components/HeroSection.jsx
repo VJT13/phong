@@ -47,12 +47,12 @@ export default function HeroSection() {
           {hero.companyImage && (
             <div className="hero-company-image-container">
               <img 
-                src={hero.companyImage} 
+                src={hero.companyImage?.replace('/images/factory/', '/images/factory/full/') || '/images/factory/full/factory-2.jpg'} 
                 alt="TecoMaco Sourcing Facility" 
                 className="hero-company-image"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "/images/factory/factory-2.jpg";
+                  e.target.src = "/images/factory/full/factory-2.jpg";
                 }}
               />
             </div>
@@ -87,12 +87,12 @@ export default function HeroSection() {
           <div className="me-card">
             <div className="me-avatar-container">
               <img 
-                src={hero.me?.photo || "/images/orin-bui.jpg"} 
+                src={hero.me?.photo || "/images/canhan/35x45-optimized.jpg"} 
                 alt={hero.me?.name || "Orin Bui"} 
                 className="me-avatar" 
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400";
+                  e.target.src = "/images/canhan/35x45-optimized.jpg";
                 }}
               />
               <div className="avatar-status" title="Online"></div>

@@ -1,11 +1,17 @@
 import { usePortfolio } from '../context/PortfolioContext';
 
 export default function Footer() {
-  const { data } = usePortfolio();
+  const { data, triggerHighlight } = usePortfolio();
   const { contact } = data;
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleProductClick = (e) => {
+    e.preventDefault();
+    scrollTo('capabilities');
+    triggerHighlight('Product Range');
   };
 
   return (
@@ -13,19 +19,23 @@ export default function Footer() {
       <div className="footer-grid">
         <div className="footer-brand">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-            <div className="nav-logo-icon">TM</div>
-            <div className="nav-logo-text">Teco<span>Maco</span></div>
+            <div className="nav-logo-icon">OB</div>
+            <div className="nav-logo-text">ORIN<span>BUI</span></div>
           </div>
           <p>
-            World-class industrial fastener manufacturer based in Vietnam.
-            Precision engineering, trusted globally. From staples to custom
-            automotive fasteners — we build what holds the world together.
+            Premier threaded rod and custom fastener manufacturing partner based in Vietnam. 
+            Precision engineering, global compliance, and stable supply chains for distributors worldwide.
           </p>
           <div className="footer-social">
-            <a href="#" aria-label="LinkedIn">in</a>
-            <a href="#" aria-label="Facebook">f</a>
-            <a href="#" aria-label="YouTube">▶</a>
-            <a href="#" aria-label="Email">✉</a>
+            {contact.linkedinLink && (
+              <a href={contact.linkedinLink} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+            )}
+            {contact.whatsappLink && (
+              <a href={contact.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">wa</a>
+            )}
+            {contact.email && (
+              <a href={`mailto:${contact.email}`} aria-label="Email">✉</a>
+            )}
           </div>
         </div>
 
@@ -33,8 +43,9 @@ export default function Footer() {
           <h4 className="footer-title">Navigation</h4>
           <ul className="footer-links">
             <li><a href="#home" onClick={(e) => { e.preventDefault(); scrollTo('home'); }}>Home</a></li>
-            <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollTo('about'); }}>About Us</a></li>
-            <li><a href="#products" onClick={(e) => { e.preventDefault(); scrollTo('products'); }}>Products</a></li>
+            <li><a href="#capabilities" onClick={(e) => { e.preventDefault(); scrollTo('capabilities'); }}>Capabilities</a></li>
+            <li><a href="#advantages" onClick={(e) => { e.preventDefault(); scrollTo('advantages'); }}>Advantages</a></li>
+            <li><a href="#gallery" onClick={(e) => { e.preventDefault(); scrollTo('gallery'); }}>Factory Gallery</a></li>
             <li><a href="#certifications" onClick={(e) => { e.preventDefault(); scrollTo('certifications'); }}>Certifications</a></li>
             <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollTo('contact'); }}>Contact</a></li>
           </ul>
@@ -43,11 +54,11 @@ export default function Footer() {
         <div>
           <h4 className="footer-title">Products</h4>
           <ul className="footer-links">
-            <li><a href="#products">Screws & Bolts</a></li>
-            <li><a href="#products">Nails & Staples</a></li>
-            <li><a href="#products">Rivets & Washers</a></li>
-            <li><a href="#products">Thread Rods</a></li>
-            <li><a href="#products">Custom Solutions</a></li>
+            <li><a href="#capabilities" onClick={handleProductClick}>Threaded Rods (DIN 975/976)</a></li>
+            <li><a href="#capabilities" onClick={handleProductClick}>Threaded Studs</a></li>
+            <li><a href="#capabilities" onClick={handleProductClick}>Stud Bolts</a></li>
+            <li><a href="#capabilities" onClick={handleProductClick}>Fully Threaded Rods</a></li>
+            <li><a href="#capabilities" onClick={handleProductClick}>Custom Threaded Solutions</a></li>
           </ul>
         </div>
 
@@ -64,7 +75,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <span>
-          © {new Date().getFullYear()} TecoMaco Industrial. All rights reserved. 
+          © {new Date().getFullYear()} ORINBUI. All rights reserved.
           <a href="#/admin" style={{ color: 'var(--accent)', marginLeft: '1rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
             ⚙️ Dashboard
           </a>

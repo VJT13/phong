@@ -167,6 +167,15 @@ export function PortfolioProvider({ children }) {
     return await updatePortfolio(defaultData);
   };
 
+  const [highlightedCategory, setHighlightedCategory] = useState(null);
+
+  const triggerHighlight = (categoryName) => {
+    setHighlightedCategory(categoryName);
+    setTimeout(() => {
+      setHighlightedCategory(null);
+    }, 2500); // Tự động xóa highlight sau 2.5 giây
+  };
+
   useEffect(() => {
     fetchPortfolioData();
   }, []);
@@ -184,7 +193,9 @@ export function PortfolioProvider({ children }) {
       resetToDefault, 
       getInquiries,
       deleteInquiry,
-      refreshData: fetchPortfolioData 
+      refreshData: fetchPortfolioData,
+      highlightedCategory,
+      triggerHighlight
     }}>
       {children}
     </PortfolioContext.Provider>

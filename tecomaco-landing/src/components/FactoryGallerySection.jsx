@@ -3,6 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { usePortfolio } from '../context/PortfolioContext';
 
+// Helper: convert /images/factory/factory-1.jpg to /images/factory/thumb/factory-1.jpg
+function toThumb(src) {
+  return src.replace('/images/factory/', '/images/factory/thumb/');
+}
+function toFull(src) {
+  return src.replace('/images/factory/', '/images/factory/full/');
+}
+
 const fadeIn = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
@@ -107,7 +115,7 @@ export default function FactoryGallerySection() {
               onClick={(e) => e.stopPropagation()}
             >
               <img 
-                src={factory.gallery[lightboxIndex].src} 
+                src={toFull(factory.gallery[lightboxIndex].src)} 
                 alt={factory.gallery[lightboxIndex].alt} 
                 className="lightbox-img"
               />
@@ -144,7 +152,7 @@ function GalleryCard({ img, i, openLightbox, imageVariants }) {
       {!isLoaded && <div className="gallery-skeleton" />}
       {inView ? (
         <img 
-          src={img.src} 
+          src={toThumb(img.src)} 
           alt={img.alt} 
           decoding="async"
           className={`gallery-thumbnail ${isLoaded ? 'loaded' : ''}`}

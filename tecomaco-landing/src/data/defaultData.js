@@ -253,6 +253,8 @@ export const defaultData = {
     phone: "+84 915601096",
     workingHours: "Mon - Sat: 8:00 AM - 5:30 PM (GMT+7)",
     zaloLink: "https://zalo.me/84915601096",
+    whatsappLink: "https://wa.me/84915601096",
+    linkedinLink: "https://www.linkedin.com/in/orinbui-tecomaco/",
     emailSubject: "RFQ Sourcing Inquiry - TecoMaco",
     emailBody: "Dear Orin, I would like to request a quotation for threaded rods. Here are our specifications..."
   }

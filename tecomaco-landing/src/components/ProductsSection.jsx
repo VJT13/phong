@@ -27,7 +27,7 @@ const categoryIcons = {
 };
 
 export default function ProductsSection() {
-  const { data } = usePortfolio();
+  const { data, highlightedCategory } = usePortfolio();
   const { capabilities } = data;
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
 
@@ -51,7 +51,7 @@ export default function ProductsSection() {
           {capabilities.categories.map((category, i) => (
             <motion.div
               key={i}
-              className="capability-card"
+              className={`capability-card ${highlightedCategory === category.title ? 'highlight-pulse' : ''}`}
               variants={cardVariants}
               initial="hidden"
               animate={inView ? 'visible' : 'hidden'}
