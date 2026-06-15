@@ -6,9 +6,24 @@ export default function FloatingContact() {
 
   if (!contact) return null;
 
-  const mailtoLink = `mailto:${contact.email}?subject=${encodeURIComponent(contact.emailSubject || '')}&body=${encodeURIComponent(contact.emailBody || '')}`;
+  const email = contact.email;
+  const subject = encodeURIComponent(contact.emailSubject || '');
+  const body = encodeURIComponent(contact.emailBody || '');
+  
+  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+  
   const whatsappUrl = contact.whatsappLink || 'https://wa.me/84915601096';
   const linkedinUrl = contact.linkedinLink || 'https://www.linkedin.com/in/orinbui-tecomaco/';
+
+  const handleMailClick = (e) => {
+    // Detect mobile device
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+      e.preventDefault();
+      window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   return (
     <div className="floating-contact-container">
@@ -20,9 +35,7 @@ export default function FloatingContact() {
         className="floating-contact-btn whatsapp-btn"
         aria-label="Chat via WhatsApp"
       >
-        <svg viewBox="0 0 24 24" className="floating-icon" fill="currentColor">
-          <path d="M17.472 14.382c-.022-.015-.022-.015-.262-.136-.24-.12-1.414-.698-1.633-.778-.22-.08-.38-.12-.54.12-.16.24-.62.778-.76.94-.14.16-.28.18-.52.06-.24-.12-.992-.367-1.89-1.168-.7-.624-1.173-1.395-1.31-1.637-.14-.24-.015-.37.105-.49.108-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.785-.195-.47-.387-.407-.54-.415-.156-.008-.336-.01-.516-.01-.18 0-.472.068-.72.336-.247.267-.945.927-.945 2.261 0 1.335.97 2.625 1.105 2.805.135.18 1.9 2.9 4.6 4.075.64.28 1.14.448 1.53.573.645.205 1.23.176 1.696.107.52-.078 1.414-.578 1.614-1.138.2-.56.2-1.04.14-1.138-.06-.097-.22-.155-.427-.272m-5.46-9.356c-4.477 0-8.12 3.642-8.12 8.119 0 1.433.372 2.83 1.08 4.057l-1.148 4.195 4.29-1.127c1.176.64 2.5.98 3.86.98 4.478 0 8.12-3.643 8.12-8.12 0-4.477-3.642-8.119-8.12-8.119m0-1.6c5.362 0 9.71 4.348 9.71 9.719 0 5.362-4.348 9.71-9.71 9.71a9.647 9.647 0 0 1-4.945-1.353l-5.38 1.413 1.438-5.25a9.664 9.664 0 0 1-1.547-5.187c0-5.361 4.348-9.71 9.71-9.71" />
-        </svg>
+        <img src="/images/icon_whatsapp.png" alt="WhatsApp" className="whatsapp-png" />
         <span className="tooltip">WhatsApp Orin Directly</span>
       </a>
 
@@ -44,6 +57,7 @@ export default function FloatingContact() {
       {contact.email && (
         <a
           href={mailtoLink}
+          onClick={handleMailClick}
           className="floating-contact-btn email-btn"
           aria-label="Send Email"
         >

@@ -2366,14 +2366,38 @@ h6 {
 }
 
 .whatsapp-btn {
-  background: #25D366;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .whatsapp-btn:hover {
-  background: #20BA5A;
+  background: transparent !important;
   transform: scale(1.1) translateY(-3px);
-  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.4);
+  box-shadow: none !important;
+}
+
+.whatsapp-png {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+  transition: filter 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: icon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    transform: scale(1.25);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+}
+
+.whatsapp-btn:hover .whatsapp-png {
+  filter: drop-shadow(0 12px 24px rgba(37, 211, 102, 0.35));
 }
 
 .linkedin-btn {
@@ -2438,7 +2462,7 @@ h6 {
 .whatsapp-btn::before {
   content: '';
   position: absolute;
-  inset: -4px;
+  inset: -8px;
   border: 2px solid #25D366;
   border-radius: 50%;
   animation: float-pulse 2s linear infinite;

@@ -22,6 +22,17 @@ function getAdminPreviewUrl(src) {
   return src;
 }
 
+// Utility: convert Google Drive PDF sharing link to a clean web preview link
+function convertGoogleDrivePdfUrl(url) {
+  if (!url || typeof url !== 'string') return url;
+  const driveRegExp = /(?:https?:\/\/)?(?:drive|docs)\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i;
+  const match = url.match(driveRegExp);
+  if (match && match[1]) {
+    return `https://drive.google.com/file/d/${match[1]}/preview`;
+  }
+  return url;
+}
+
 export default function AdminDashboard() {
   const { data, loading, error, updatePortfolio, resetToDefault, isAuthenticated, logout, getInquiries, deleteInquiry } = usePortfolio();
   const [activeTab, setActiveTab] = useState('hero');
@@ -177,7 +188,10 @@ export default function AdminDashboard() {
   // Certifications CRUD Managers
   const updateCert = (index, field, value) => {
     const newCerts = [...localData.certifications.list];
-    newCerts[index][field] = value;
+    newCerts[index] = {
+      ...newCerts[index],
+      [field]: field === 'pdfUrl' ? convertGoogleDrivePdfUrl(value) : value
+    };
     setLocalData(prev => ({
       ...prev,
       certifications: { ...prev.certifications, list: newCerts }

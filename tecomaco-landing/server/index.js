@@ -209,9 +209,20 @@ app.post('/api/inquiries', async (req, res) => {
 
     // Trigger email notification asynchronously if SMTP configured
     if (transporter) {
+      // Fetch destination email from active Portfolio configuration (contact.email)
+      let destinationEmail = EMAIL_USER;
+      try {
+        const portfolio = await Portfolio.findOne().sort({ createdAt: -1 });
+        if (portfolio && portfolio.contact && portfolio.contact.email) {
+          destinationEmail = portfolio.contact.email;
+        }
+      } catch (dbErr) {
+        console.error("Error fetching destination email from portfolio:", dbErr.message);
+      }
+
       const mailOptions = {
         from: EMAIL_USER,
-        to: EMAIL_USER, // Send notification to portfolio owner
+        to: destinationEmail, // Send notification to portfolio owner's configured email
         subject: `[Portfolio Inquiry] ${subject} - Từ: ${name}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; color: #1e293b; background-color: #ffffff;">
