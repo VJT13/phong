@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { usePortfolio } from '../context/PortfolioContext';
+import { handleMailClick } from '../utils/mailHelper';
 
 const fadeIn = {
   hidden: { opacity: 0, y: 40 },
@@ -96,7 +97,11 @@ export default function ContactSection() {
                 <div className="manager-role">International Sales Manager</div>
                 
                 <div className="manager-links">
-                  <a href={`mailto:${contact.email}`} className="manager-link-item">
+                  <a 
+                    href={`mailto:${contact.email}?subject=${encodeURIComponent(contact.emailSubject || '')}&body=${encodeURIComponent(contact.emailBody || '')}`} 
+                    onClick={(e) => handleMailClick(e, contact.email, contact.emailSubject, contact.emailBody)}
+                    className="manager-link-item"
+                  >
                     <span className="icon">📧</span>
                     <span>{contact.email}</span>
                   </a>

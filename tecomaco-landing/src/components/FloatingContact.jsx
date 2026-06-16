@@ -1,4 +1,5 @@
 import { usePortfolio } from '../context/PortfolioContext';
+import { handleMailClick } from '../utils/mailHelper';
 
 export default function FloatingContact() {
   const { data } = usePortfolio();
@@ -7,23 +8,12 @@ export default function FloatingContact() {
   if (!contact) return null;
 
   const email = contact.email;
-  const subject = encodeURIComponent(contact.emailSubject || '');
-  const body = encodeURIComponent(contact.emailBody || '');
+  const subject = contact.emailSubject || '';
+  const body = contact.emailBody || '';
   
-  const mailtoLink = `mailto:${email}?subject=${subject}&body=${body}`;
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
-  
+  const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   const whatsappUrl = contact.whatsappLink || 'https://wa.me/84915601096';
   const linkedinUrl = contact.linkedinLink || 'https://www.linkedin.com/in/orinbui-tecomaco/';
-
-  const handleMailClick = (e) => {
-    // Detect mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (!isMobile) {
-      e.preventDefault();
-      window.open(gmailUrl, '_blank', 'noopener,noreferrer');
-    }
-  };
 
   return (
     <div className="floating-contact-container">
@@ -57,7 +47,7 @@ export default function FloatingContact() {
       {contact.email && (
         <a
           href={mailtoLink}
-          onClick={handleMailClick}
+          onClick={(e) => handleMailClick(e, email, subject, body)}
           className="floating-contact-btn email-btn"
           aria-label="Send Email"
         >

@@ -198,6 +198,37 @@ export default function AdminDashboard() {
     }));
   };
 
+  const addCert = () => {
+    const newId = localData.certifications.list.length > 0 
+      ? Math.max(...localData.certifications.list.map(c => c.id || 0)) + 1 
+      : 1;
+    
+    const newCert = {
+      id: newId,
+      title: 'New Certificate Title',
+      icon: '🏆',
+      pdfUrl: '',
+      shortDesc: 'Short description of the new certificate.',
+      longDesc: 'Detailed description of the new certificate, shown inside the PDF viewer modal.'
+    };
+
+    setLocalData(prev => ({
+      ...prev,
+      certifications: {
+        ...prev.certifications,
+        list: [...prev.certifications.list, newCert]
+      }
+    }));
+  };
+
+  const removeCert = (index) => {
+    const newCerts = localData.certifications.list.filter((_, i) => i !== index);
+    setLocalData(prev => ({
+      ...prev,
+      certifications: { ...prev.certifications, list: newCerts }
+    }));
+  };
+
   // Client Countries CRUD Managers
   const updateClientCountry = (index, field, value) => {
     const newCountries = [...localData.clients.countries];
@@ -595,7 +626,16 @@ export default function AdminDashboard() {
               <div className="admin-certs-list" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 {localData.certifications.list.map((cert, idx) => (
                   <div key={idx} className="admin-subcard">
-                    <h4 className="admin-subcard-title">Certificate {idx + 1}</h4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <h4 className="admin-subcard-title" style={{ marginBottom: 0 }}>Certificate {idx + 1}</h4>
+                      <button 
+                        onClick={() => removeCert(idx)} 
+                        className="admin-btn-secondary"
+                        style={{ padding: '0.5rem 0.75rem', border: '1px solid #ef4444', color: '#ef4444', height: 'fit-content' }}
+                      >
+                        Delete
+                      </button>
+                    </div>
                     <div className="admin-grid-3" style={{ gap: '0.75rem' }}>
                       <div className="admin-form-group">
                         <label className="admin-label">Certificate Title</label>
@@ -622,6 +662,14 @@ export default function AdminDashboard() {
                     </div>
                   </div>
                 ))}
+                
+                <button 
+                  onClick={addCert} 
+                  className="admin-btn-secondary mt-4" 
+                  style={{ width: '100%', borderStyle: 'dashed', color: 'var(--accent)' }}
+                >
+                  + Add New Certificate
+                </button>
               </div>
             </div>
           )}

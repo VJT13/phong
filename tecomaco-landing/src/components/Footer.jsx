@@ -1,4 +1,5 @@
 import { usePortfolio } from '../context/PortfolioContext';
+import { handleMailClick } from '../utils/mailHelper';
 
 export default function Footer() {
   const { data, triggerHighlight } = usePortfolio();
@@ -34,7 +35,13 @@ export default function Footer() {
               <a href={contact.whatsappLink} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">wa</a>
             )}
             {contact.email && (
-              <a href={`mailto:${contact.email}`} aria-label="Email">✉</a>
+              <a 
+                href={`mailto:${contact.email}?subject=${encodeURIComponent(contact.emailSubject || '')}&body=${encodeURIComponent(contact.emailBody || '')}`} 
+                onClick={(e) => handleMailClick(e, contact.email, contact.emailSubject, contact.emailBody)}
+                aria-label="Email"
+              >
+                ✉
+              </a>
             )}
           </div>
         </div>
