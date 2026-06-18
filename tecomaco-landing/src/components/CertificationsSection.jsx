@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { usePortfolio } from '../context/PortfolioContext';
@@ -20,6 +20,15 @@ function getDownloadUrl(url) {
 }
 
 function CertModal({ cert, onClose }) {
+  useEffect(() => {
+    // Lock background page scroll
+    document.body.style.overflow = 'hidden';
+    return () => {
+      // Restore background page scroll on close
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   if (!cert) return null;
   return (
     <motion.div

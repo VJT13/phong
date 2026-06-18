@@ -30,6 +30,9 @@ export default function FactoryGallerySection() {
   const { factory } = data;
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const INITIAL_COUNT = 8;
 
   if (!factory || !factory.gallery || factory.gallery.length === 0) return null;
 
@@ -45,6 +48,45 @@ export default function FactoryGallerySection() {
     e.stopPropagation();
     setLightboxIndex((prev) => (prev === factory.gallery.length - 1 ? 0 : prev + 1));
   };
+
+  const handleToggle = () => {
+    if (isExpanded) {
+      setIsExpanded(false);
+      const element = document.getElementById("gallery");
+      if (element) {
+        const offset = 80;
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const elementRect = element.getBoundingClientRect().top;
+        const elementPosition = elementRect - bodyRect;
+        const offsetPosition = elementPosition - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+      }
+    } else {
+      setIsExpanded(true);
+      setTimeout(() => {
+        const items = document.querySelectorAll(".gallery-item-wrapper");
+        if (items && items.length > INITIAL_COUNT) {
+          const targetItem = items[INITIAL_COUNT];
+          const offset = 100; // Offset to keep some nice spacing above the newly shown row
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const targetRect = targetItem.getBoundingClientRect().top;
+          const targetPosition = targetRect - bodyRect;
+          const offsetPosition = targetPosition - offset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      }, 100);
+    }
+  };
+
+  const visibleImages = isExpanded ? factory.gallery : factory.gallery.slice(0, INITIAL_COUNT);
 
   return (
     <section id="gallery" className="section gallery-section" ref={ref}>
@@ -81,16 +123,47 @@ export default function FactoryGallerySection() {
 
         {/* Gallery Image Grid */}
         <div className="gallery-grid">
-          {factory.gallery.map((img, i) => (
-            <GalleryCard 
-              key={i}
-              img={img}
-              i={i}
-              openLightbox={openLightbox}
-              imageVariants={imageVariants}
-            />
-          ))}
+          {visibleImages.map((img, index) => {
+            const realIndex = factory.gallery.findIndex((g) => g.src === img.src);
+            const actualIndex = realIndex !== -1 ? realIndex : index;
+            return (
+              <GalleryCard 
+                key={actualIndex}
+                img={img}
+                i={actualIndex}
+                openLightbox={openLightbox}
+                imageVariants={imageVariants}
+              />
+            );
+          })}
         </div>
+
+        {factory.gallery.length > INITIAL_COUNT && (
+          <div className="gallery-actions">
+            <motion.button
+              className="gallery-toggle-btn"
+              onClick={handleToggle}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span>
+                {isExpanded ? "See Less" : `See More (+${factory.gallery.length - INITIAL_COUNT} Photos)`}
+              </span>
+              <motion.svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2.5}
+                stroke="currentColor"
+                className="toggle-arrow"
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </motion.svg>
+            </motion.button>
+          </div>
+        )}
       </div>
 
       {/* Lightbox Modal */}

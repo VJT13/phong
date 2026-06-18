@@ -836,6 +836,7 @@ h6 {
   overflow: hidden;
   border: 1px solid rgba(0, 0, 0, 0.1);
   margin-top: 1.5rem;
+  overscroll-behavior: contain;
 }
 
 .pdf-viewer-container iframe {
@@ -978,6 +979,7 @@ h6 {
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+  overscroll-behavior: contain;
 }
 
 .modal-header {
@@ -3335,6 +3337,45 @@ h6 {
   font-weight: 600;
   color: var(--white);
   margin: 0;
+}
+
+.gallery-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.gallery-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.88rem 2.25rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.gallery-toggle-btn:hover {
+  background: var(--primary);
+  color: var(--white);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.gallery-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.toggle-arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
 }
 
 /* Lightbox Modal */
